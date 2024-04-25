@@ -2,6 +2,7 @@
 using System;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Text;
 using System.Windows;
 using UBB_SE_2024_Popsicles.Models;
 using UBB_SE_2024_Popsicles.Repositories;
@@ -14,8 +15,10 @@ namespace Test_UBB_SE_2024_Popsicles
         
             private SqlConnection connection;
             private GroupMemberRepository repository;
+            private static readonly Random random = new Random();
+            private const string CharSet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; 
 
-            [SetUp]
+          [SetUp]
             public void Setup()
             {
             
@@ -34,8 +37,9 @@ namespace Test_UBB_SE_2024_Popsicles
             [Test]
             public void AddGroupMember_ValidGroupMember_AddsMemberToDatabaseAndRepository()
             {
+               
                 // Arrange
-                var groupMember = new GroupMember(Guid.NewGuid(), "testuser", "testpassword", "testemail@example.com", "123456789", "Test Description");
+                var groupMember = new GroupMember(Guid.NewGuid(), GenerateRandomString(10), "testpassword", GenerateRandomString(10), GenerateRandomString(10), "Test Description");
 
                 // Act
                 repository.AddGroupMember(groupMember);
@@ -48,16 +52,22 @@ namespace Test_UBB_SE_2024_Popsicles
             [Test]
             public void GetGroupMemberById_ExistingId_ReturnsCorrectMember()
             {
+               
                 // Arrange
                 var groupMemberId = Guid.NewGuid();
-                var groupMember = new GroupMember(groupMemberId, "testuser", "testpassword", "testemail@example.com", "123456789", "Test Description");
-
+                var groupMember = new GroupMember(groupMemberId, GenerateRandomString(10), "testpassword", GenerateRandomString(10), GenerateRandomString(10), "Test Description");
+                repository.AddGroupMember(groupMember);
                 // Act
                 var retrievedMember = repository.GetGroupMemberById(groupMemberId);
 
                 // Assert
-                Assert.That(groupMember==retrievedMember);
-            }
+                Assert.That(groupMember.Id==retrievedMember.Id);
+                Assert.That(groupMember.Description == retrievedMember.Description);
+                Assert.That(groupMember.Email == retrievedMember.Email);
+                Assert.That(groupMember.Password == retrievedMember.Password);
+                Assert.That(groupMember.Phone == retrievedMember.Phone);
+                Assert.That(groupMember.Username == retrievedMember.Username);
+        }
 
             [Test]
             public void GetGroupMemberById_NonExistingId_ThrowsException()
@@ -72,9 +82,10 @@ namespace Test_UBB_SE_2024_Popsicles
         [Test]
             public void UpdateGroupMember_ValidGroupMember_UpdatesMemberInDatabaseAndRepository()
             {
-                // Arrange
-                var groupMemberId = Guid.NewGuid();
-                var groupMember = new GroupMember(groupMemberId, "testuser", "testpassword", "testemail@example.com", "123456789", "Test Description");
+                
+            // Arrange
+            var groupMemberId = Guid.NewGuid();
+                var groupMember = new GroupMember(groupMemberId, GenerateRandomString(10), "testpassword", GenerateRandomString(10), GenerateRandomString(10), "Test Description");
                 repository.AddGroupMember(groupMember);
 
                 // Modify member details
@@ -91,30 +102,45 @@ namespace Test_UBB_SE_2024_Popsicles
             [Test]
             public void RemoveGroupMemberById_ExistingId_RemovesMemberFromDatabaseAndRepository()
             {
-                // Arrange
+               
+             // Arrange
                 var groupMemberId = Guid.NewGuid();
-                var groupMember = new GroupMember(groupMemberId, "testuser", "testpassword", "testemail@example.com", "123456789", "Test Description");
+                var groupMember = new GroupMember(groupMemberId, GenerateRandomString(10), "testpassword", GenerateRandomString(10), GenerateRandomString(10), "Test Description");
                 repository.AddGroupMember(groupMember);
 
                 // Act
                 repository.RemoveGroupMemberById(groupMemberId);
 
                 // Assert
-                Assert.That(MemberExistsInDatabase(groupMemberId));
-                Assert.That(repository.GroupMembers.Contains(groupMember));
+                Assert.That(MemberExistsInDatabase(groupMemberId)==false);
+                Assert.That(repository.GroupMembers.Contains(groupMember)==false);
             }
 
             [Test]
             public void RemoveGroupMemberById_NonExistingId_ThrowsException()
             {
-                // Arrange - Create a group member with a known ID
+                // Arrange - Create a non-existing group member ID
                 var nonExistingId = Guid.NewGuid();
 
                 // Act & Assert
-                Assert.Throws<Exception>(() => repository.RemoveGroupMemberById(nonExistingId));
+                Assert.Throws<System.InvalidOperationException>(() => repository.RemoveGroupMemberById(nonExistingId));
+            }
+           
+
+            public static string GenerateRandomString(int length)
+            {
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < length; i++)
+                {
+                    int index = random.Next(CharSet.Length);
+                    builder.Append(CharSet[index]);
+                }
+                return builder.ToString();
             }
 
-            private bool MemberExistsInDatabase(Guid memberId)
+
+
+        private bool MemberExistsInDatabase(Guid memberId)
             {
                 // Check if the member exists in the database
                 connection.Open();
