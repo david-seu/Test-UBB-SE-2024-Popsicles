@@ -4,7 +4,7 @@ using System.Data.SqlClient;
 using UBB_SE_2024_Popsicles.Models;
 using UBB_SE_2024_Popsicles.Repositories;
 
-namespace UnitTests
+namespace Test_UBB_SE_2024_Popsicles
 {
     [TestFixture]
     public class GroupRepositoryTests
@@ -143,7 +143,7 @@ namespace UnitTests
             repository.RemoveGroupById(group.Id);
 
             // Assert
-            Assert.That(repository.GetGroups().Count==3);
+            Assert.That(repository.GetGroups().Contains(group)==false);
         }
     }
 }
