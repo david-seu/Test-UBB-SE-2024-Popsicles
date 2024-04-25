@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\seu21\\Documente\\GitHub\\Test-UBB-SE-2024-Popsicles\\Test-UBB-SE-2024-Popsicles.csproj": {}
+    "D:\\Facultate\\ISS\\Test-UBB-SE-2024-Popsicles\\Test-UBB-SE-2024-Popsicles.csproj": {}
   },
   "projects": {
-    "C:\\Users\\seu21\\Documente\\GitHub\\Test-UBB-SE-2024-Popsicles\\Test-UBB-SE-2024-Popsicles.csproj": {
+    "D:\\Facultate\\ISS\\Test-UBB-SE-2024-Popsicles\\Test-UBB-SE-2024-Popsicles.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\seu21\\Documente\\GitHub\\Test-UBB-SE-2024-Popsicles\\Test-UBB-SE-2024-Popsicles.csproj",
+        "projectUniqueName": "D:\\Facultate\\ISS\\Test-UBB-SE-2024-Popsicles\\Test-UBB-SE-2024-Popsicles.csproj",
         "projectName": "Test-UBB-SE-2024-Popsicles",
-        "projectPath": "C:\\Users\\seu21\\Documente\\GitHub\\Test-UBB-SE-2024-Popsicles\\Test-UBB-SE-2024-Popsicles.csproj",
-        "packagesPath": "C:\\Users\\seu21\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\seu21\\Documente\\GitHub\\Test-UBB-SE-2024-Popsicles\\obj\\",
+        "projectPath": "D:\\Facultate\\ISS\\Test-UBB-SE-2024-Popsicles\\Test-UBB-SE-2024-Popsicles.csproj",
+        "packagesPath": "C:\\Users\\stefa\\.nuget\\packages\\",
+        "outputPath": "D:\\Facultate\\ISS\\Test-UBB-SE-2024-Popsicles\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\seu21\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\stefa\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -32,8 +32,8 @@
           "net8.0-windows7.0": {
             "targetAlias": "net8.0-windows",
             "projectReferences": {
-              "C:\\Users\\seu21\\Documente\\GitHub\\UBB-SE-2024-Popsicles\\UBB-SE-2024-Popsicles.csproj": {
-                "projectPath": "C:\\Users\\seu21\\Documente\\GitHub\\UBB-SE-2024-Popsicles\\UBB-SE-2024-Popsicles.csproj"
+              "D:\\Facultate\\ISS\\UBB-SE-2024-Popsicles\\UBB-SE-2024-Popsicles.csproj": {
+                "projectPath": "D:\\Facultate\\ISS\\UBB-SE-2024-Popsicles\\UBB-SE-2024-Popsicles.csproj"
               }
             }
           }
@@ -56,6 +56,10 @@
             "Microsoft.NET.Test.Sdk": {
               "target": "Package",
               "version": "[17.8.0, )"
+            },
+            "Moq": {
+              "target": "Package",
+              "version": "[4.20.70, )"
             },
             "NUnit": {
               "target": "Package",
@@ -94,20 +98,20 @@
         }
       }
     },
-    "C:\\Users\\seu21\\Documente\\GitHub\\UBB-SE-2024-Popsicles\\UBB-SE-2024-Popsicles.csproj": {
+    "D:\\Facultate\\ISS\\UBB-SE-2024-Popsicles\\UBB-SE-2024-Popsicles.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\seu21\\Documente\\GitHub\\UBB-SE-2024-Popsicles\\UBB-SE-2024-Popsicles.csproj",
+        "projectUniqueName": "D:\\Facultate\\ISS\\UBB-SE-2024-Popsicles\\UBB-SE-2024-Popsicles.csproj",
         "projectName": "UBB-SE-2024-Popsicles",
-        "projectPath": "C:\\Users\\seu21\\Documente\\GitHub\\UBB-SE-2024-Popsicles\\UBB-SE-2024-Popsicles.csproj",
-        "packagesPath": "C:\\Users\\seu21\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\seu21\\Documente\\GitHub\\UBB-SE-2024-Popsicles\\obj\\",
+        "projectPath": "D:\\Facultate\\ISS\\UBB-SE-2024-Popsicles\\UBB-SE-2024-Popsicles.csproj",
+        "packagesPath": "C:\\Users\\stefa\\.nuget\\packages\\",
+        "outputPath": "D:\\Facultate\\ISS\\UBB-SE-2024-Popsicles\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\seu21\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\stefa\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -139,6 +143,10 @@
         "net8.0-windows7.0": {
           "targetAlias": "net8.0-windows",
           "dependencies": {
+            "Moq": {
+              "target": "Package",
+              "version": "[4.20.70, )"
+            },
             "StyleCop.Analyzers": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
