@@ -22,7 +22,7 @@ namespace Test_UBB_SE_2024_Popsicles
             public void Setup()
             {
 
-            string connectionString = "Server=DESKTOP-55UJ616\\SQLEXPRESS;Database=TestPopsicles;Integrated Security=true;TrustServerCertificate=true;";
+            string connectionString = "Server=MARCHOME\\SQLEXPRESS;Database=TestPopsicles;Integrated Security=true;TrustServerCertificate=true;";
             connection = new SqlConnection(connectionString);
                 repository = new GroupMemberRepository(connection);
             }
@@ -45,7 +45,7 @@ namespace Test_UBB_SE_2024_Popsicles
                 repository.AddGroupMember(groupMember);
 
                 // Assert
-                Assert.That(repository.GroupMembers.Contains(groupMember));
+                Assert.That(repository.GetGroupMembers().Contains(groupMember));
                 Assert.That(MemberExistsInDatabase(groupMember.Id));
             }
 
@@ -113,7 +113,7 @@ namespace Test_UBB_SE_2024_Popsicles
 
                 // Assert
                 Assert.That(MemberExistsInDatabase(groupMemberId)==false);
-                Assert.That(repository.GroupMembers.Contains(groupMember)==false);
+                Assert.That(repository.GetGroupMembers().Contains(groupMember)==false);
             }
 
             [Test]

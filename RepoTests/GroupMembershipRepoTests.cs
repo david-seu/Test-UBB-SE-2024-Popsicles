@@ -14,7 +14,7 @@ namespace UnitTests
         [SetUp]
         public void Setup()
         {
-            string connection = "Server=DESKTOP-55UJ616\\SQLEXPRESS;Database=TestPopsicles;Integrated Security=true;TrustServerCertificate=true;";
+            string connection = "Server=MARCHOME\\SQLEXPRESS;Database=TestPopsicles;Integrated Security=true;TrustServerCertificate=true;";
             SqlConnection conn = new SqlConnection(connection);
 
             repository = new GroupMembershipRepository(conn);

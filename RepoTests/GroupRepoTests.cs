@@ -1,8 +1,10 @@
 ﻿using NUnit.Framework;
 using System;
 using System.Data.SqlClient;
+using System.Text.RegularExpressions;
 using UBB_SE_2024_Popsicles.Models;
 using UBB_SE_2024_Popsicles.Repositories;
+using Group = UBB_SE_2024_Popsicles.Models.Group;
 
 namespace Test_UBB_SE_2024_Popsicles
 {
@@ -15,7 +17,7 @@ namespace Test_UBB_SE_2024_Popsicles
         [SetUp]
         public void Setup()
         {
-            string connection = "Server=DESKTOP-55UJ616\\SQLEXPRESS;Database=TestPopsicles;Integrated Security=true;TrustServerCertificate=true;";
+            string connection = "Server=MARCHOME\\SQLEXPRESS;Database=TestPopsicles;Integrated Security=true;TrustServerCertificate=true;";
             SqlConnection conn = new SqlConnection(connection);
             
             repository = new GroupRepository(conn);
@@ -123,6 +125,7 @@ namespace Test_UBB_SE_2024_Popsicles
         {
             // Arrange
             // Arrange
+            
             Guid Id = Guid.NewGuid();
             Guid OwnerId = repository.GetGroups()[0].OwnerId;
             string Name = "Test Group";
