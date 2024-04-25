@@ -17,6 +17,7 @@ namespace UnitTests
         {
             string connection = "Server=MARCHOME\\SQLEXPRESS;Database=TestPopsicles;Integrated Security=true;TrustServerCertificate=true;";
             SqlConnection conn = new SqlConnection(connection);
+            
             repository = new GroupRepository(conn);
         }
 
@@ -32,7 +33,8 @@ namespace UnitTests
         {
             // Arrange
             Guid Id = Guid.NewGuid();
-            Guid OwnerId = Guid.NewGuid();
+            Guid OwnerId = repository.GetGroups()[0].OwnerId;
+            Console.WriteLine(repository.GetGroups()[0].Id);
             string Name = "Test Group";
             string Description = "Test Description";
             string Icon = "test_icon.png";
@@ -48,7 +50,7 @@ namespace UnitTests
             repository.AddGroup(group);
 
             // Assert
-            Assert.Equals(repository.GetGroups()[0], group);
+            Assert.That(repository.GetGroups().Contains(group));
         }
 
         [Test]
@@ -56,7 +58,7 @@ namespace UnitTests
         {
             // Arrange
             Guid Id = Guid.NewGuid();
-            Guid OwnerId = Guid.NewGuid();
+            Guid OwnerId = repository.GetGroups()[0].OwnerId;
             string Name = "Test Group";
             string Description = "Test Description";
             string Icon = "test_icon.png";
@@ -74,7 +76,7 @@ namespace UnitTests
             Group retrievedGroup = repository.GetGroupById(group.Id);
 
             // Assert
-            Assert.Equals(group, retrievedGroup);
+            Assert.That(retrievedGroup==group);
         }
 
         [Test]
@@ -83,7 +85,7 @@ namespace UnitTests
          
             // Arrange
             Guid Id = Guid.NewGuid();
-            Guid OwnerId = Guid.NewGuid();
+            Guid OwnerId = repository.GetGroups()[0].OwnerId;
             string Name = "Test Group";
             string Description = "Test Description";
             string Icon = "test_icon.png";
@@ -113,7 +115,7 @@ namespace UnitTests
             Group updatedGroup = repository.GetGroupById(group.Id);
 
             // Assert
-            Assert.Equals(group, updatedGroup);
+            Assert.That(updatedGroup==group);
         }
 
         [Test]
@@ -122,7 +124,7 @@ namespace UnitTests
             // Arrange
             // Arrange
             Guid Id = Guid.NewGuid();
-            Guid OwnerId = Guid.NewGuid();
+            Guid OwnerId = repository.GetGroups()[0].OwnerId;
             string Name = "Test Group";
             string Description = "Test Description";
             string Icon = "test_icon.png";
@@ -136,12 +138,12 @@ namespace UnitTests
 
             // Act
             repository.AddGroup(group);
-
+      
             // Act
             repository.RemoveGroupById(group.Id);
 
             // Assert
-            Assert.Equals(repository.GetGroups().Count,0);
+            Assert.That(repository.GetGroups().Count==3);
         }
     }
 }
