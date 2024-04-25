@@ -1,4 +1,4 @@
-using UBB_SE_2024_Popsicles.Models;
+using UBB_SE_2024_Popsicles.Repositories;
 
 namespace Test_UBB_SE_2024_Popsicles
 {
