@@ -8,7 +8,7 @@
           "build/netstandard2.0/coverlet.collector.targets": {}
         }
       },
-      "Microsoft.CodeCoverage/17.9.0": {
+      "Microsoft.CodeCoverage/17.10.0-release-24177-07": {
         "type": "package",
         "compile": {
           "lib/netcoreapp3.1/Microsoft.VisualStudio.CodeCoverage.Shim.dll": {}
@@ -21,11 +21,11 @@
           "build/netstandard2.0/Microsoft.CodeCoverage.targets": {}
         }
       },
-      "Microsoft.NET.Test.Sdk/17.9.0": {
+      "Microsoft.NET.Test.Sdk/17.10.0-release-24177-07": {
         "type": "package",
         "dependencies": {
-          "Microsoft.CodeCoverage": "17.9.0",
-          "Microsoft.TestPlatform.TestHost": "17.9.0"
+          "Microsoft.CodeCoverage": "17.10.0-release-24177-07",
+          "Microsoft.TestPlatform.TestHost": "17.10.0-release-24177-07"
         },
         "compile": {
           "lib/netcoreapp3.1/_._": {}
@@ -50,7 +50,7 @@
           "lib/netstandard1.0/_._": {}
         }
       },
-      "Microsoft.TestPlatform.ObjectModel/17.9.0": {
+      "Microsoft.TestPlatform.ObjectModel/17.10.0-release-24177-07": {
         "type": "package",
         "dependencies": {
           "System.Reflection.Metadata": "1.6.0"
@@ -146,10 +146,10 @@
           }
         }
       },
-      "Microsoft.TestPlatform.TestHost/17.9.0": {
+      "Microsoft.TestPlatform.TestHost/17.10.0-release-24177-07": {
         "type": "package",
         "dependencies": {
-          "Microsoft.TestPlatform.ObjectModel": "17.9.0",
+          "Microsoft.TestPlatform.ObjectModel": "17.10.0-release-24177-07",
           "Newtonsoft.Json": "13.0.1"
         },
         "compile": {
@@ -623,15 +623,14 @@
         "coverlet.collector.nuspec"
       ]
     },
-    "Microsoft.CodeCoverage/17.9.0": {
-      "sha512": "RGD37ZSrratfScYXm7M0HjvxMxZyWZL4jm+XgMZbkIY1UPgjUpbNA/t+WTGj/rC/0Hm9A3IrH3ywbKZkOCnoZA==",
+    "Microsoft.CodeCoverage/17.10.0-release-24177-07": {
+      "sha512": "mq5zBpsT40IHOm25aLP9dwWBjT3rH/PyiwiyQ+krHGfp57r9C3MtjTY6WPMtM8DK9osRCBqEGXAjjEkVXpOZAg==",
       "type": "package",
-      "path": "microsoft.codecoverage/17.9.0",
+      "path": "microsoft.codecoverage/17.10.0-release-24177-07",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Icon.png",
-        "LICENSE_MIT.txt",
         "ThirdPartyNotices.txt",
         "build/netstandard2.0/CodeCoverage/CodeCoverage.config",
         "build/netstandard2.0/CodeCoverage/CodeCoverage.exe",
@@ -660,6 +659,7 @@
         "build/netstandard2.0/InstrumentationEngine/x64/MicrosoftInstrumentationEngine_x64.dll",
         "build/netstandard2.0/InstrumentationEngine/x86/MicrosoftInstrumentationEngine_x86.dll",
         "build/netstandard2.0/Microsoft.CodeCoverage.Core.dll",
+        "build/netstandard2.0/Microsoft.CodeCoverage.Instrumentation.Core.dll",
         "build/netstandard2.0/Microsoft.CodeCoverage.Instrumentation.dll",
         "build/netstandard2.0/Microsoft.CodeCoverage.Interprocess.dll",
         "build/netstandard2.0/Microsoft.CodeCoverage.props",
@@ -685,19 +685,18 @@
         "build/netstandard2.0/zh-Hant/Microsoft.VisualStudio.TraceDataCollector.resources.dll",
         "lib/net462/Microsoft.VisualStudio.CodeCoverage.Shim.dll",
         "lib/netcoreapp3.1/Microsoft.VisualStudio.CodeCoverage.Shim.dll",
-        "microsoft.codecoverage.17.9.0.nupkg.sha512",
+        "microsoft.codecoverage.17.10.0-release-24177-07.nupkg.sha512",
         "microsoft.codecoverage.nuspec"
       ]
     },
-    "Microsoft.NET.Test.Sdk/17.9.0": {
-      "sha512": "7GUNAUbJYn644jzwLm5BD3a2p9C1dmP8Hr6fDPDxgItQk9hBs1Svdxzz07KQ/UphMSmgza9AbijBJGmw5D658A==",
+    "Microsoft.NET.Test.Sdk/17.10.0-release-24177-07": {
+      "sha512": "OIvw7UlANS20ybCP7orcX4WSfyUc7SUzkAl/Fo51O9IqmSJA0Pa8LW96bQ3c8KFDiV7K5ckSS0QFmyw10C66IA==",
       "type": "package",
-      "path": "microsoft.net.test.sdk/17.9.0",
+      "path": "microsoft.net.test.sdk/17.10.0-release-24177-07",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Icon.png",
-        "LICENSE_MIT.txt",
         "build/net462/Microsoft.NET.Test.Sdk.props",
         "build/net462/Microsoft.NET.Test.Sdk.targets",
         "build/netcoreapp3.1/Microsoft.NET.Test.Sdk.Program.cs",
@@ -708,7 +707,7 @@
         "buildMultiTargeting/Microsoft.NET.Test.Sdk.props",
         "lib/net462/_._",
         "lib/netcoreapp3.1/_._",
-        "microsoft.net.test.sdk.17.9.0.nupkg.sha512",
+        "microsoft.net.test.sdk.17.10.0-release-24177-07.nupkg.sha512",
         "microsoft.net.test.sdk.nuspec"
       ]
     },
@@ -729,15 +728,14 @@
         "version.txt"
       ]
     },
-    "Microsoft.TestPlatform.ObjectModel/17.9.0": {
-      "sha512": "1ilw/8vgmjLyKU+2SKXKXaOqpYFJCQfGqGz+x0cosl981VzjrY74Sv6qAJv+neZMZ9ZMxF3ArN6kotaQ4uvEBw==",
+    "Microsoft.TestPlatform.ObjectModel/17.10.0-release-24177-07": {
+      "sha512": "Km1jsYkTtwZmN3EQ4kom76eZiN/WXWiMkk007NpL39lP6OtFD2NARw4bqs+NMokIFQZrMwqtt+IVtvDgbkiQbA==",
       "type": "package",
-      "path": "microsoft.testplatform.objectmodel/17.9.0",
+      "path": "microsoft.testplatform.objectmodel/17.10.0-release-24177-07",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Icon.png",
-        "LICENSE_MIT.txt",
         "lib/net462/Microsoft.TestPlatform.CoreUtilities.dll",
         "lib/net462/Microsoft.TestPlatform.PlatformAbstractions.dll",
         "lib/net462/Microsoft.VisualStudio.TestPlatform.ObjectModel.dll",
@@ -825,19 +823,18 @@
         "lib/netstandard2.0/zh-Hans/Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll",
         "lib/netstandard2.0/zh-Hant/Microsoft.TestPlatform.CoreUtilities.resources.dll",
         "lib/netstandard2.0/zh-Hant/Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll",
-        "microsoft.testplatform.objectmodel.17.9.0.nupkg.sha512",
+        "microsoft.testplatform.objectmodel.17.10.0-release-24177-07.nupkg.sha512",
         "microsoft.testplatform.objectmodel.nuspec"
       ]
     },
-    "Microsoft.TestPlatform.TestHost/17.9.0": {
-      "sha512": "Spmg7Wx49Ya3SxBjyeAR+nQpjMTKZwTwpZ7KyeOTIqI/WHNPnBU4HUvl5kuHPQAwGWqMy4FGZja1HvEwvoaDiA==",
+    "Microsoft.TestPlatform.TestHost/17.10.0-release-24177-07": {
+      "sha512": "yPFZE4cUyJLMsDCHY8EC8N945Cxy+sXB8Epa5aC3glcAMlm9vziUtKDvbY1lNmMB8Ri2E4OHfEQuor1/pLWqtg==",
       "type": "package",
-      "path": "microsoft.testplatform.testhost/17.9.0",
+      "path": "microsoft.testplatform.testhost/17.10.0-release-24177-07",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Icon.png",
-        "LICENSE_MIT.txt",
         "ThirdPartyNotices.txt",
         "build/netcoreapp3.1/Microsoft.TestPlatform.TestHost.props",
         "build/netcoreapp3.1/x64/testhost.dll",
@@ -895,7 +892,7 @@
         "lib/netcoreapp3.1/zh-Hant/Microsoft.TestPlatform.CommunicationUtilities.resources.dll",
         "lib/netcoreapp3.1/zh-Hant/Microsoft.TestPlatform.CrossPlatEngine.resources.dll",
         "lib/netcoreapp3.1/zh-Hant/Microsoft.VisualStudio.TestPlatform.Common.resources.dll",
-        "microsoft.testplatform.testhost.17.9.0.nupkg.sha512",
+        "microsoft.testplatform.testhost.17.10.0-release-24177-07.nupkg.sha512",
         "microsoft.testplatform.testhost.nuspec"
       ]
     },
@@ -1397,7 +1394,7 @@
   },
   "projectFileDependencyGroups": {
     "net8.0-windows7.0": [
-      "Microsoft.NET.Test.Sdk >= 17.9.0",
+      "Microsoft.NET.Test.Sdk >= 17.10.0-release-24177-07",
       "NUnit >= 4.1.0",
       "NUnit.Analyzers >= 4.2.0",
       "NUnit3TestAdapter >= 4.5.0",
@@ -1406,23 +1403,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\marcl\\.nuget\\packages\\": {},
+    "C:\\Users\\Erik\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\marcl\\OneDrive\\Documents\\GitHub\\Test-UBB-SE-2024-Popsicles\\Test-UBB-SE-2024-Popsicles.csproj",
+      "projectUniqueName": "D:\\Users\\Erik\\POPSICLES\\Test-UBB-SE-2024-Popsicles\\Test-UBB-SE-2024-Popsicles.csproj",
       "projectName": "Test-UBB-SE-2024-Popsicles",
-      "projectPath": "C:\\Users\\marcl\\OneDrive\\Documents\\GitHub\\Test-UBB-SE-2024-Popsicles\\Test-UBB-SE-2024-Popsicles.csproj",
-      "packagesPath": "C:\\Users\\marcl\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\marcl\\OneDrive\\Documents\\GitHub\\Test-UBB-SE-2024-Popsicles\\obj\\",
+      "projectPath": "D:\\Users\\Erik\\POPSICLES\\Test-UBB-SE-2024-Popsicles\\Test-UBB-SE-2024-Popsicles.csproj",
+      "packagesPath": "C:\\Users\\Erik\\.nuget\\packages\\",
+      "outputPath": "D:\\Users\\Erik\\POPSICLES\\Test-UBB-SE-2024-Popsicles\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\marcl\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Erik\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -1431,15 +1428,14 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0-windows7.0": {
           "targetAlias": "net8.0-windows",
           "projectReferences": {
-            "C:\\Users\\marcl\\OneDrive\\Documents\\GitHub\\UBB-SE-2024-Popsicles\\UBB-SE-2024-Popsicles.csproj": {
-              "projectPath": "C:\\Users\\marcl\\OneDrive\\Documents\\GitHub\\UBB-SE-2024-Popsicles\\UBB-SE-2024-Popsicles.csproj"
+            "D:\\Users\\Erik\\POPSICLES\\UBB-SE-2024-Popsicles\\UBB-SE-2024-Popsicles.csproj": {
+              "projectPath": "D:\\Users\\Erik\\POPSICLES\\UBB-SE-2024-Popsicles\\UBB-SE-2024-Popsicles.csproj"
             }
           }
         }
@@ -1461,7 +1457,7 @@
         "dependencies": {
           "Microsoft.NET.Test.Sdk": {
             "target": "Package",
-            "version": "[17.9.0, )"
+            "version": "[17.10.0-release-24177-07, )"
           },
           "NUnit": {
             "target": "Package",

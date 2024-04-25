@@ -21,9 +21,9 @@ namespace Test_UBB_SE_2024_Popsicles
           [SetUp]
             public void Setup()
             {
-            
-                string connectionString = "Server = MARCHOME\\SQLEXPRESS; Database = TestPopsicles; Integrated Security = true; TrustServerCertificate = true;";
-                connection = new SqlConnection(connectionString);
+
+            string connectionString = "Server=DESKTOP-55UJ616\\SQLEXPRESS;Database=TestPopsicles;Integrated Security=true;TrustServerCertificate=true;";
+            connection = new SqlConnection(connectionString);
                 repository = new GroupMemberRepository(connection);
             }
 
