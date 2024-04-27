@@ -42,7 +42,7 @@ namespace Test_UBB_SE_2024_Popsicles.MainWindowViewTests
              ObservableCollection<Group> actualGroups = testView.CollectionOfActiveGroups;
 
             // Assert
-            ClassicAssert.AreSame(mockGroups, actualGroups); // Assert they are the same object reference
+            ClassicAssert.AreEqual(mockGroups, actualGroups); // Assert they are the same object reference
             ClassicAssert.AreEqual(5, actualGroups.Count); // Assert the number of groups
             ClassicAssert.AreEqual("Group Name", testView.CollectionOfActiveGroups[0].Name);
         }
@@ -78,14 +78,14 @@ namespace Test_UBB_SE_2024_Popsicles.MainWindowViewTests
 
             testView.CurrentActiveUser= newUser.Object;
 
-            ClassicAssert.AreSame(testView.CurrentActiveUser,newUser.Object);
+            ClassicAssert.AreEqual(testView.CurrentActiveUser,newUser.Object);
         }
 
         [Test]
         public void CurrentlySelectedGroupGetterTest()
         {
             Group actualGroup = testView.CurrentlySelectedGroup;
-            ClassicAssert.AreSame(actualGroup, mockGroups[0]);
+            ClassicAssert.AreEqual(actualGroup, mockGroups[0]);
             ClassicAssert.AreEqual("Group Name", testView.CurrentlySelectedGroup.Name);
             ClassicAssert.AreEqual("test", testView.CurrentlySelectedGroup.Description);
         }

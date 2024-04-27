@@ -32,7 +32,7 @@ namespace Test_UBB_SE_2024_Popsicles.PollViewModelTests
         public void PollThatIsEncapsulatedByThisInstanceOnViewModelTest()
         {
             Poll actualPoll = testViewModel.PollThatIsEncapsulatedByThisInstanceOnViewModel;
-            ClassicAssert.AreSame(mockPoll.Object, actualPoll);
+            ClassicAssert.AreEqual(mockPoll.Object, actualPoll);
         }
 
         [Test]

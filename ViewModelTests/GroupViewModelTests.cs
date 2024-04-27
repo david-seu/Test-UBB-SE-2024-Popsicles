@@ -36,9 +36,48 @@ namespace Test_UBB_SE_2024_Popsicles.GroupViewModelTests
             testViewModel.PostsMadeInTheGroupChat = new ObservableCollection<GroupPost>() { mockPostInGroup.Object };
             testViewModel.CollectionOfPolls = new ObservableCollection<Poll>() { mockPoll.Object };
             testViewModel.CollectionOfViewModelsForEachIndividualPoll = new ObservableCollection<PollViewModel>() { mockPollView.Object };
+            testViewModel.AllowanceOfPostageOnTheGroupChat = "true";
+            
 
 
         }
+
+        [Test]
+        public void GroupMembersGetterTest()
+        {
+            ObservableCollection<GroupMember> actualMembers = new ObservableCollection<GroupMember>()
+                { mockGroupMember.Object };
+            ClassicAssert.AreEqual(actualMembers, testViewModel.GroupMembers);
+        }
+
+        [Test]
+        public void RequestsGetterTest()
+        {
+            ObservableCollection<Request> actualRequests = new ObservableCollection<Request>()
+            {
+                mockRequest.Object
+            };
+            ClassicAssert.AreEqual(testViewModel.RequestsToJoinTheGroup, actualRequests);
+        }
+
+        [Test]
+        public void PostsGetterTest()
+        {
+            ObservableCollection<GroupPost> actualPosts = new ObservableCollection<GroupPost>()
+            {
+                mockPostInGroup.Object
+            };
+            ClassicAssert.AreEqual(testViewModel.PostsMadeInTheGroupChat, actualPosts);
+        }
+
+        [Test]
+        public void CollectionOfPollViewModelsGetter()
+        {
+            ObservableCollection<PollViewModel> actualPollViewModels = new ObservableCollection<PollViewModel>() { mockPollView.Object };
+            ClassicAssert.AreEqual(testViewModel.CollectionOfViewModelsForEachIndividualPoll, actualPollViewModels);
+        }
+       
+
 
     }
 }
