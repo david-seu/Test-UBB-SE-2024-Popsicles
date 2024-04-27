@@ -70,6 +70,8 @@ namespace Test_UBB_SE_2024_Popsicles.MainWindowViewTests
 
             ClassicAssert.AreEqual(actualUser,mockUser.Object);
         }
+
+        [Test]
         public void CurrentActiveUser_Setter_ShouldChangeUser()
         {
             Mock<GroupMember> newUser = new Mock<GroupMember>(It.IsAny<Guid>(), "test", "test", "test", "test", "test");
