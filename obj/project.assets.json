@@ -617,7 +617,6 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
-          "Moq": "4.20.70",
           "System.Data.SqlClient": "4.8.6",
           "System.Drawing.Common": "8.0.4"
         },
@@ -1691,23 +1690,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\stefa\\.nuget\\packages\\": {},
+    "C:\\Users\\User\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Facultate\\ISS\\Test-UBB-SE-2024-Popsicles\\Test-UBB-SE-2024-Popsicles.csproj",
+      "projectUniqueName": "C:\\Users\\User\\OneDrive\\Desktop\\Test-UBB-SE-2024-Popsicles\\Test-UBB-SE-2024-Popsicles.csproj",
       "projectName": "Test-UBB-SE-2024-Popsicles",
-      "projectPath": "D:\\Facultate\\ISS\\Test-UBB-SE-2024-Popsicles\\Test-UBB-SE-2024-Popsicles.csproj",
-      "packagesPath": "C:\\Users\\stefa\\.nuget\\packages\\",
-      "outputPath": "D:\\Facultate\\ISS\\Test-UBB-SE-2024-Popsicles\\obj\\",
+      "projectPath": "C:\\Users\\User\\OneDrive\\Desktop\\Test-UBB-SE-2024-Popsicles\\Test-UBB-SE-2024-Popsicles.csproj",
+      "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\User\\OneDrive\\Desktop\\Test-UBB-SE-2024-Popsicles\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\stefa\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -1716,14 +1715,15 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0-windows7.0": {
           "targetAlias": "net8.0-windows",
           "projectReferences": {
-            "D:\\Facultate\\ISS\\UBB-SE-2024-Popsicles\\UBB-SE-2024-Popsicles.csproj": {
-              "projectPath": "D:\\Facultate\\ISS\\UBB-SE-2024-Popsicles\\UBB-SE-2024-Popsicles.csproj"
+            "C:\\Users\\User\\OneDrive\\Desktop\\UBB-SE-2024-Popsicles\\UBB-SE-2024-Popsicles.csproj": {
+              "projectPath": "C:\\Users\\User\\OneDrive\\Desktop\\UBB-SE-2024-Popsicles\\UBB-SE-2024-Popsicles.csproj"
             }
           }
         }
