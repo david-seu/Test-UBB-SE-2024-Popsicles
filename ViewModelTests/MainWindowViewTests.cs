@@ -44,7 +44,7 @@ namespace Test_UBB_SE_2024_Popsicles.MainWindowViewTests
             // Assert
             ClassicAssert.AreEqual(mockGroups, actualGroups); // Assert they are the same object reference
             ClassicAssert.AreEqual(5, actualGroups.Count); // Assert the number of groups
-            ClassicAssert.AreEqual("Group Name", testView.CollectionOfActiveGroups[0].Name);
+            ClassicAssert.AreEqual("Group Name", testView.CollectionOfActiveGroups[0].GroupName);
         }
 
 
@@ -61,7 +61,7 @@ namespace Test_UBB_SE_2024_Popsicles.MainWindowViewTests
 
             // Assert
             ClassicAssert.AreEqual(1, testView.CollectionOfActiveGroups.Count);
-            ClassicAssert.AreEqual("New group", testView.CollectionOfActiveGroups[0].Name);
+            ClassicAssert.AreEqual("New group", testView.CollectionOfActiveGroups[0].GroupName);
         }
         [Test]
         public void CurrentActiveUser_Getter_ShouldReturnUser()
@@ -86,8 +86,8 @@ namespace Test_UBB_SE_2024_Popsicles.MainWindowViewTests
         {
             Group actualGroup = testView.CurrentlySelectedGroup;
             ClassicAssert.AreEqual(actualGroup, mockGroups[0]);
-            ClassicAssert.AreEqual("Group Name", testView.CurrentlySelectedGroup.Name);
-            ClassicAssert.AreEqual("test", testView.CurrentlySelectedGroup.Description);
+            ClassicAssert.AreEqual("Group Name", testView.CurrentlySelectedGroup.GroupName);
+            ClassicAssert.AreEqual("test", testView.CurrentlySelectedGroup.GroupDescription);
         }
 
         [Test]
@@ -97,7 +97,7 @@ namespace Test_UBB_SE_2024_Popsicles.MainWindowViewTests
 
             testView.CurrentlySelectedGroup= newMockGroup.Object;
 
-            ClassicAssert.AreEqual("New group", testView.CurrentlySelectedGroup.Name);
+            ClassicAssert.AreEqual("New group", testView.CurrentlySelectedGroup.GroupName);
         }
     }
 
