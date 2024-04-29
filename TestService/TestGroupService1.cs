@@ -36,20 +36,20 @@ namespace Test_UBB_SE_2024_Popsicles.TestService
                 requestsRepositoryMock.Object);
         }
 
-        public Group CreateGroupWithMemberFactory(bool bypassesPostageRestriction = false)
+        public Group CreateGroupWithMemberFactory(bool bypassesPostageRestriction = false, bool allowanceOfPostage = false, int maximumNumberOfPostsPerHour = 5)
         {
             groupId = Guid.NewGuid();
             groupMemberId = Guid.NewGuid();
             Guid groupMembershipId = Guid.NewGuid();
+
+            Group group = new Group(groupId, groupMemberId, "Test Name", "Test Description", "Test Icon", "Test Banner",
+                maximumNumberOfPostsPerHour, true, allowanceOfPostage, "Test Code");
 
             GroupMember groupMember = new GroupMember(groupMemberId, "Test User", "Test Password", "Test Email",
                 "Test Phone number", "Test Description");
 
             GroupMembership groupMembership = new GroupMembership(groupMembershipId, groupMemberId,
                 groupMember.UserName, groupId, "Test Group Member Role", DateTime.Now, false, false, bypassesPostageRestriction);
-
-            Group group = new Group(groupId, groupMemberId, "Test Name", "Test Description", "Test Icon", "Test Banner",
-                5, true, true, "Test Code");
 
             group.AddMember(groupMembership);
 
@@ -67,11 +67,63 @@ namespace Test_UBB_SE_2024_Popsicles.TestService
             Guid groupMemberId = this.groupMemberId;
             string postContent = "Test post";
             string postImage = "Test image";
+
             // Act
             groupService.CreateNewPostOnGroupChat(groupId, groupMemberId, postContent, postImage);
 
             // Assert
-            ClassicAssert.AreEqual(1, group.ListOfGroupPosts.Count);
+            ClassicAssert.That(group.ListOfGroupPosts.Count, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void CreateNewPostOnGroupChat_PostageIsAllowed_AddsNewGroupPosts()
+        {
+            // Arange
+            Group group = CreateGroupWithMemberFactory(allowanceOfPostage: true);
+            Guid groupId = this.groupId;
+            Guid groupMemberId = this.groupMemberId;
+            string postContent = "Test post";
+            string postImage = "Test image";
+
+            // Act
+            groupService.CreateNewPostOnGroupChat(groupId, groupMemberId, postContent, postImage);
+
+            // Assert
+            ClassicAssert.That(group.ListOfGroupPosts.Count, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void CreateNewPostOnGroupChat_LimitPostNotReached_AddsNewGroupPosts()
+        {
+            // Arrange
+            Group group = CreateGroupWithMemberFactory();
+            Guid groupId = this.groupId;
+            Guid groupMemberId = this.groupMemberId;
+
+            // Act
+            groupService.CreateNewPostOnGroupChat(groupId, groupMemberId, "Test Post", "Test image");
+
+            // Assert
+            ClassicAssert.That(group.ListOfGroupPosts.Count, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void CreateNewPostOnGroupChat_LimitOfPostsReached_ExceptionThrown()
+        {
+            // Arrange
+            Group group = CreateGroupWithMemberFactory(maximumNumberOfPostsPerHour: 0);
+            Guid groupMemberId = this.groupMemberId;
+            Guid groupId = this.groupId;
+
+            try
+            {
+                // Act
+                groupService.CreateNewPostOnGroupChat(groupId, groupMemberId, "Test Post", "Test image");
+            }
+            catch (Exception expectedException)
+            {
+                ClassicAssert.That(expectedException.Message, Is.EqualTo("Post limit exceeded"));
+            }
         }
     }
 }
