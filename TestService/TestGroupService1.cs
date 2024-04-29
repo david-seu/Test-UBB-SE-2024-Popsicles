@@ -306,5 +306,6 @@ namespace Test_UBB_SE_2024_Popsicles.TestService
             // Act & Assert
             Assert.Throws<Exception>(() => groupService.RemoveMemberFromGroup(groupMember.UserId, group.GroupId));
         }
+
     }
 }
