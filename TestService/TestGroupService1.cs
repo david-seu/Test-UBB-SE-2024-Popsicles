@@ -125,11 +125,28 @@ namespace Test_UBB_SE_2024_Popsicles.TestService
             GroupMember groupMember = CreateGroupMemberFactory();
             Guid groupId = group.GroupId;
             Guid grupMemberId = groupMember.UserId;
-            groupMemberRepositoryMock.Setup(repository => repository.GetGroupMemberById(It.IsAny<Guid>()))
-                .Returns(null);
+            groupMemberRepositoryMock.Setup(repository => repository.GetGroupMemberById(groupMember.UserId))
+                .Throws(new Exception("Group member not found"));
 
             // Act & Assert
-            Assert.Throws<Exception>(() => groupService.AddMemberToGroup(grupMemberId, groupId);
+            Assert.Throws<Exception>(() => groupService.AddMemberToGroup(grupMemberId, groupId));
+        }
+
+        [Test]
+        public void AddMemberToGroup_InValidGroupIdValidGroupMemberId_ThrowsException()
+        {
+            // Arrange
+            Group group;
+            GroupMember groupOwner;
+            (group, groupOwner) = CreateGroupFactory();
+            GroupMember groupMember = CreateGroupMemberFactory();
+            Guid groupId = group.GroupId;
+            Guid grupMemberId = groupMember.UserId;
+            groupMemberRepositoryMock.Setup(repository => repository.GetGroupMemberById(groupMember.UserId))
+                .Throws(new Exception("Group member not found"));
+
+            // Act & Assert
+            Assert.Throws<Exception>(() => groupService.AddMemberToGroup(grupMemberId, groupId));
         }
     }
 }
