@@ -244,8 +244,7 @@ namespace Test_UBB_SE_2024_Popsicles.TestService
         public (Group, GroupMember, GroupMembership) FactoryRemoveMemberFromGroup()
         {
             Group group;
-            GroupMember groupOwner;
-            (group, groupOwner) = CreateGroupFactory();
+            (group, _) = CreateGroupFactory();
             GroupMember groupMember = CreateGroupMemberFactory();
             GroupMembership groupMembership = CreateGroupMembershipFactory(groupMember, group);
             groupMember.AddGroupMembership(groupMembership);
@@ -271,6 +270,41 @@ namespace Test_UBB_SE_2024_Popsicles.TestService
 
             // Assert
             ClassicAssert.AreEqual(1, group.ListOfGroupMemberships.Count);
+        }
+
+        [Test]
+        public void RemoveMemberFromGroup_InValidGroupIdAndGroupMemberId_RemovesMemberFromGroup()
+        {
+            // Arrange
+            Group group;
+            GroupMember groupMember;
+            GroupMembership groupMembership;
+            (group, groupMember, groupMembership) = FactoryRemoveMemberFromGroup();
+            groupMemberRepositoryMock.Setup(repository => repository.GetGroupMemberById(groupMember.UserId))
+                .Returns(groupMember);
+            groupRepositoryMock.Setup(repository => repository.GetGroupById(group.GroupId)).Throws<Exception>();
+            groupMembershipRepositoryMock.Setup(repository =>
+                repository.RemoveGroupMembershipById(groupMembership.GroupMembershipId));
+
+            // Act & Assert
+            Assert.Throws<Exception>(() => groupService.RemoveMemberFromGroup(groupMember.UserId, group.GroupId));
+        }
+
+        [Test]
+        public void RemoveMemberFromGroup_ValidGroupIdAndInvalidGroupMemberId_RemovesMemberFromGroup()
+        {
+            // Arrange
+            Group group;
+            GroupMember groupMember;
+            GroupMembership groupMembership;
+            (group, groupMember, groupMembership) = FactoryRemoveMemberFromGroup();
+            groupMemberRepositoryMock.Setup(repository => repository.GetGroupMemberById(groupMember.UserId))
+                .Throws<Exception>();
+            groupMembershipRepositoryMock.Setup(repository =>
+                repository.RemoveGroupMembershipById(groupMembership.GroupMembershipId));
+
+            // Act & Assert
+            Assert.Throws<Exception>(() => groupService.RemoveMemberFromGroup(groupMember.UserId, group.GroupId));
         }
     }
 }
