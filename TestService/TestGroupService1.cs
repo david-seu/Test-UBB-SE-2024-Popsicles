@@ -152,21 +152,27 @@ namespace Test_UBB_SE_2024_Popsicles.TestService
             }
         }
 
+        public (Group, GroupMember) FactoryForAddMemberToGroup()
+        {
+            Group group;
+            GroupMember groupOwner;
+            (group, groupOwner) = CreateGroupFactory();
+            GroupMember groupMember = CreateGroupMemberFactory();
+            return (group, groupMember);
+        }
+
         [Test]
         public void AddMemberToGroup_ValidGroupIdAndGroupMemberId_AddsMemberToGroup()
         {
             // Arrange
             Group group;
-            GroupMember groupOwner;
-            (group, groupOwner) = CreateGroupFactory();
-            GroupMember groupMember = CreateGroupMemberFactory();
-            Guid groupId = group.GroupId;
-            Guid grupMemberId = groupMember.UserId;
+            GroupMember groupMember;
+            (group, groupMember) = FactoryForAddMemberToGroup();
             groupMemberRepositoryMock.Setup(repository => repository.GetGroupMemberById(It.IsAny<Guid>()))
                 .Returns(groupMember);
 
             // Act
-            groupService.AddMemberToGroup(grupMemberId, groupId);
+            groupService.AddMemberToGroup(groupMember.UserId, group.GroupId);
 
             // Assert
             ClassicAssert.AreEqual(group.ListOfGroupMemberships.Count, 2);
@@ -176,13 +182,14 @@ namespace Test_UBB_SE_2024_Popsicles.TestService
         public void AddMemberToGroup_ValidGroupIdInvalidGroupMemberId_ThrowsException()
         {
             // Arrange
-            (group, groupOwner) = CreateGroupFactory();
-            groupMember = CreateGroupMemberFactory();
+            Group group;
+            GroupMember groupMember;
+            (group, groupMember) = FactoryForAddMemberToGroup();
             groupMemberRepositoryMock.Setup(repository => repository.GetGroupMemberById(groupMember.UserId))
                 .Throws(new Exception("Group member not found"));
 
             // Act & Assert
-            Assert.Throws<Exception>(() => groupService.AddMemberToGroup(grupMemberId, groupId));
+            Assert.Throws<Exception>(() => groupService.AddMemberToGroup(groupMember.UserId, group.GroupId));
         }
 
         [Test]
@@ -190,9 +197,8 @@ namespace Test_UBB_SE_2024_Popsicles.TestService
         {
             // Arrange
             Group group;
-            GroupMember groupOwner;
-            (group, groupOwner) = CreateGroupFactory();
-            GroupMember groupMember = CreateGroupMemberFactory();
+            GroupMember groupMember;
+            (group, groupMember) = FactoryForAddMemberToGroup();
             groupMemberRepositoryMock.Setup(repository => repository.GetGroupMemberById(groupMember.UserId))
                 .Returns(groupMember);
             groupRepositoryMock.Setup(repository => repository.GetGroupById(group.GroupId))
@@ -202,30 +208,36 @@ namespace Test_UBB_SE_2024_Popsicles.TestService
             Assert.Throws<Exception>(() => groupService.AddMemberToGroup(groupMember.UserId, group.GroupId));
         }
 
+        public (Group, GroupMember, GroupMembership) FactoryRemoveMemberFromGroup()
+        {
+            Group group;
+            GroupMember groupOwner;
+            (group, groupOwner) = CreateGroupFactory();
+            GroupMember groupMember = CreateGroupMemberFactory();
+            GroupMembership groupMembership = CreateGroupMembershipFactory(groupMember, group);
+            groupMember.AddGroupMembership(groupMembership);
+            group.AddMembership(groupMembership);
+            return (group, groupMember, groupMembership);
+        }
 
         [Test]
         public void RemoveMemberFromGroup_ValidGroupIdAndGroupMemberId_RemovesMemberFromGroup()
         {
             // Arrange
             Group group;
-            GroupMember groupOwner;
-            (group, groupOwner) = CreateGroupFactory();
-            GroupMember groupMember = CreateGroupMemberFactory();
-            GroupMembership groupMembership = CreateGroupMembershipFactory(groupMember.UserId, group.GroupId);
-            group.AddMembership(groupMembership);
-            Guid groupId = group.GroupId;
-            Guid grupMemberId = groupMember.UserId;
+            GroupMember groupMember;
+            GroupMembership groupMembership;
+            (group, groupMember, groupMembership) = FactoryRemoveMemberFromGroup();
             groupMemberRepositoryMock.Setup(repository => repository.GetGroupMemberById(groupMember.UserId))
                 .Returns(groupMember);
             groupMembershipRepositoryMock.Setup(repository =>
                 repository.RemoveGroupMembershipById(groupMembership.GroupMembershipId));
 
-
             // Act
-            groupService.AddMemberToGroup(grupMemberId, groupId);
+            groupService.RemoveMemberFromGroup(groupMember.UserId, group.GroupId);
 
             // Assert
-            ClassicAssert.AreEqual(group.ListOfGroupMemberships.Count, 1);
+            ClassicAssert.AreEqual(1, group.ListOfGroupMemberships.Count);
         }
     }
 }
