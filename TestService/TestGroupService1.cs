@@ -19,8 +19,6 @@ namespace Test_UBB_SE_2024_Popsicles.TestService
         private Mock<IGroupMembershipRepository> groupMembershipRepositoryMock;
         private Mock<IJoinRequestRepository> requestsRepositoryMock;
         private GroupService groupService;
-        private Guid groupId;
-        private Guid groupMemberId;
 
         [SetUp]
         public void SetUp()
@@ -36,10 +34,10 @@ namespace Test_UBB_SE_2024_Popsicles.TestService
                 requestsRepositoryMock.Object);
         }
 
-        public Group CreateGroupWithMemberFactory(bool bypassesPostageRestriction = false)
+        public (Group, GroupMember) CreateGroupFactory(bool bypassesPostageRestriction = false)
         {
-            groupId = Guid.NewGuid();
-            groupMemberId = Guid.NewGuid();
+            Guid groupId = Guid.NewGuid();
+            Guid groupMemberId = Guid.NewGuid();
             Guid groupMembershipId = Guid.NewGuid();
 
             GroupMember groupMember = new GroupMember(groupMemberId, "Test User", "Test Password", "Test Email",
@@ -55,23 +53,83 @@ namespace Test_UBB_SE_2024_Popsicles.TestService
 
             groupRepositoryMock.Setup(repository => repository.GetGroupById(It.IsAny<Guid>())).Returns(group);
 
-            return group;
+            return (group, groupMember);
+        }
+
+        public GroupMember CreateGroupMemberFactory()
+        {
+            Guid groupMemberId = Guid.NewGuid();
+            Guid groupMembershipId = Guid.NewGuid();
+
+            GroupMember groupMember = new GroupMember(groupMemberId, "Test User", "Test Password", "Test Email",
+                "Test Phone number", "Test Description");
+
+            return groupMember;
+        }
+
+        public GroupMembership CreateGroupMembershipFactory(GroupMember groupMember, Group group, bool bypassesPostageRestriction = false)
+        {
+            Guid groupMembershipId = Guid.NewGuid();
+
+            GroupMembership groupMembership = new GroupMembership(groupMembershipId, groupMember.UserId,
+                "Test userName", group.GroupId, "Test Group Member Role", DateTime.Now, false, false, bypassesPostageRestriction);
+            return groupMembership;
         }
 
         [Test]
         public void CreateNewPostOnGroupChat_BypassesPostageRestriction_AddsNewGroupPosts()
         {
             // Arrange
-            Group group = CreateGroupWithMemberFactory(bypassesPostageRestriction: true);
-            Guid groupId = this.groupId;
-            Guid groupMemberId = this.groupMemberId;
+            Group group;
+            GroupMember groupMember;
+            (group, groupMember) = CreateGroupFactory(bypassesPostageRestriction: true);
+            Guid groupId = group.GroupId;
+            Guid groupMemberId = groupMember.UserId;
             string postContent = "Test post";
             string postImage = "Test image";
+
             // Act
             groupService.CreateNewPostOnGroupChat(groupId, groupMemberId, postContent, postImage);
 
             // Assert
             ClassicAssert.AreEqual(1, group.ListOfGroupPosts.Count);
+        }
+
+        [Test]
+        public void AddMemberToGroup_ValidGroupIdAndGroupMemberId_AddsMemberToGroup()
+        {
+            // Arrange
+            Group group;
+            GroupMember groupOwner;
+            (group, groupOwner) = CreateGroupFactory();
+            GroupMember groupMember = CreateGroupMemberFactory();
+            Guid groupId = group.GroupId;
+            Guid grupMemberId = groupMember.UserId;
+            groupMemberRepositoryMock.Setup(repository => repository.GetGroupMemberById(It.IsAny<Guid>()))
+                .Returns(groupMember);
+
+            // Act
+            groupService.AddMemberToGroup(grupMemberId, groupId);
+
+            // Assert
+            ClassicAssert.AreEqual(group.ListOfGroupMemberships.Count, 2);
+        }
+
+        [Test]
+        public void AddMemberToGroup_ValidGroupIdInvalidGroupMemberId_ThrowsException()
+        {
+            // Arrange
+            Group group;
+            GroupMember groupOwner;
+            (group, groupOwner) = CreateGroupFactory();
+            GroupMember groupMember = CreateGroupMemberFactory();
+            Guid groupId = group.GroupId;
+            Guid grupMemberId = groupMember.UserId;
+            groupMemberRepositoryMock.Setup(repository => repository.GetGroupMemberById(It.IsAny<Guid>()))
+                .Returns(null);
+
+            // Act & Assert
+            Assert.Throws<Exception>(() => groupService.AddMemberToGroup(grupMemberId, groupId);
         }
     }
 }
