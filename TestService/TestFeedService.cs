@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UBB_SE_2024_Popsicles.Models;
 using UBB_SE_2024_Popsicles.Services;
+using NUnit.Framework.Legacy;
 
 namespace Test_UBB_SE_2024_Popsicles.TestService
 {
@@ -29,27 +30,27 @@ namespace Test_UBB_SE_2024_Popsicles.TestService
             List<GroupPost> posts = new List<GroupPost>
                 {gp1,gp2,gp3,gp4};
 
-            gp1.AddTag("tag1");
-            gp1.AddTag("tag2");
+            gp1.AddPostTag("tag1");
+            gp1.AddPostTag("tag2");
 
-            gp2.AddTag("tag2");
-            gp2.AddTag("tag3");
+            gp2.AddPostTag("tag2");
+            gp2.AddPostTag("tag3");
 
-            gp3.AddTag("tag1");
-            gp1.AddTag("tag3");
+            gp3.AddPostTag("tag1");
+            gp1.AddPostTag("tag3");
 
-            gp4.AddTag("tag4");
+            gp4.AddPostTag("tag4");
 
 
             List<string> tags = new List<string> { "tag5", "tag6" };
 
             // Act
-            List<GroupPost> filteredPosts = _feedService.FilterPostsByTags(posts, tags);
+            List<GroupPost> filteredPosts = _feedService.FilterGroupPostsByTags(posts, tags);
 
-            // Assert
-            Assert.AreEqual(0, filteredPosts.Count);
-            Assert.IsFalse(filteredPosts.Any(post => post.Id == posts[0].Id));
-            Assert.IsFalse(filteredPosts.Any(post => post.Id == posts[2].Id));
+            // ClassicAssert
+            ClassicAssert.AreEqual(0, filteredPosts.Count);
+            ClassicAssert.IsFalse(filteredPosts.Any(post => post.PostId == posts[0].PostId));
+            ClassicAssert.IsFalse(filteredPosts.Any(post => post.PostId == posts[2].PostId));
         }
 
         [Test]
@@ -64,16 +65,16 @@ namespace Test_UBB_SE_2024_Popsicles.TestService
             List<GroupPost> posts = new List<GroupPost>
             {gp1,gp2,gp3,gp4};
 
-            gp1.AddTag("tag1");
-            gp1.AddTag("tag2");
+            gp1.AddPostTag("tag1");
+            gp1.AddPostTag("tag2");
 
-            gp2.AddTag("tag2");
-            gp2.AddTag("tag3");
+            gp2.AddPostTag("tag2");
+            gp2.AddPostTag("tag3");
 
-            gp3.AddTag("tag1");
-            gp1.AddTag("tag3");
+            gp3.AddPostTag("tag1");
+            gp1.AddPostTag("tag3");
 
-            gp4.AddTag("tag4");
+            gp4.AddPostTag("tag4");
 
             List<string> tags = new List<string> { "tag5", "tag6" };
 
@@ -81,10 +82,10 @@ namespace Test_UBB_SE_2024_Popsicles.TestService
 
 
             // Act
-            List<GroupPost> filteredPosts = _feedService.FilterPostsByTags(posts, tags);
+            List<GroupPost> filteredPosts = _feedService.FilterGroupPostsByTags(posts, tags);
 
-            // Assert
-            Assert.IsEmpty(filteredPosts);
+            // ClassicAssert
+            ClassicAssert.IsEmpty(filteredPosts);
         }
 
 

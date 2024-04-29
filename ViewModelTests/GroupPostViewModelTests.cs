@@ -1,11 +1,5 @@
-﻿using System.Collections.ObjectModel;
-using System.Runtime.InteropServices.JavaScript;
-using NUnit.Framework;
-using UBB_SE_2024_Popsicles.Models;
-using UBB_SE_2024_Popsicles.ViewModels;
-using Moq;
+﻿using UBB_SE_2024_Popsicles.ViewModels;
 using NUnit.Framework.Legacy;
-using System.ComponentModel;
 
 namespace Test_UBB_SE_2024_Popsicles.GroupPostViewModelTests
 {

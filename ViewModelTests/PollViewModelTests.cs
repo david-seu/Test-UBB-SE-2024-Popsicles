@@ -10,80 +10,77 @@ namespace Test_UBB_SE_2024_Popsicles.PollViewModelTests
 {
     public class PollViewModelTests
     {
-        public Mock<Poll> mockPoll;
-        public List<string> mockList;
-        public PollViewModel testViewModel;
+        public Mock<GroupPoll> MockPoll;
+        public List<string> MockList;
+        public PollViewModel TestViewModel;
 
         [SetUp]
         public void Setup()
         {
-            mockList = new List<string>() {  "Option 1", "Option 2", "Option 3", "Option 4" };
-            mockPoll = new Mock<Poll>(It.IsAny<Guid>(), It.IsAny<Guid>(), "Test description", It.IsAny<Guid>());
+            MockList = new List<string>() { "Option 1", "Option 2", "Option 3", "Option 4" };
+            MockPoll = new Mock<GroupPoll>(It.IsAny<Guid>(), It.IsAny<Guid>(), "Test description", It.IsAny<Guid>());
 
-            mockPoll.Object.Options = mockList;
+            MockPoll.Object.GroupPollOptions = MockList;
 
-            testViewModel = new PollViewModel(mockPoll.Object);
-            
+            TestViewModel = new PollViewModel(MockPoll.Object);
         }
 
         //----------------------------------------Get/Set Functions--------------------------------
-
         [Test]
         public void PollThatIsEncapsulatedByThisInstanceOnViewModelTest()
         {
-            Poll actualPoll = testViewModel.PollThatIsEncapsulatedByThisInstanceOnViewModel;
-            ClassicAssert.AreEqual(mockPoll.Object, actualPoll);
+            GroupPoll actualGroupPoll = TestViewModel.GroupPollThatIsEncapsulatedByThisInstanceOnViewModel;
+            ClassicAssert.AreEqual(MockPoll.Object, actualGroupPoll);
         }
 
         [Test]
         public void DescriptionOfThePollTest()
         {
             string newDescription = "New Test description";
-            testViewModel.DescriptionOfThePoll = newDescription;
+            TestViewModel.DescriptionOfThePoll = newDescription;
 
-            ClassicAssert.AreEqual(newDescription, testViewModel.DescriptionOfThePoll);
-            ClassicAssert.AreEqual(newDescription, mockPoll.Object.Description);
+            ClassicAssert.AreEqual(newDescription, TestViewModel.DescriptionOfThePoll);
+            ClassicAssert.AreEqual(newDescription, MockPoll.Object.GroupPollDescription);
         }
-
 
         [Test]
         public void FirstPossibleOptionOfThePollTest()
         {
             string newOption = "New Option 1";
-            testViewModel.FirstPossibleOptionOfThePoll = newOption;
+            TestViewModel.FirstPossibleOptionOfThePoll = newOption;
 
-            ClassicAssert.AreEqual(newOption, testViewModel.FirstPossibleOptionOfThePoll);
-            ClassicAssert.AreEqual(newOption, mockPoll.Object.Options[0]);
+            ClassicAssert.AreEqual(newOption, TestViewModel.FirstPossibleOptionOfThePoll);
+            ClassicAssert.AreEqual(newOption, MockPoll.Object.GroupPollOptions[0]);
         }
 
         [Test]
         public void SecondPossibleOptionOfThePollTest()
         {
             string newOption = "New Option 2";
-            testViewModel.SecondPossibleOptionOfThePoll = newOption;
+            TestViewModel.SecondPossibleOptionOfThePoll = newOption;
 
-            ClassicAssert.AreEqual(newOption, testViewModel.SecondPossibleOptionOfThePoll);
-            ClassicAssert.AreEqual(newOption, mockPoll.Object.Options[1]);
+            ClassicAssert.AreEqual(newOption, TestViewModel.SecondPossibleOptionOfThePoll);
+            ClassicAssert.AreEqual(newOption, MockPoll.Object.GroupPollOptions[1]);
         }
 
         [Test]
         public void ThirdPossibleOptionOfThePollTest()
         {
             string newOption = "New Option 3";
-            testViewModel.ThirdPossibleOptionOfThePoll = newOption;
+            TestViewModel.ThirdPossibleOptionOfThePoll = newOption;
 
-            ClassicAssert.AreEqual(newOption, testViewModel.ThirdPossibleOptionOfThePoll);
-            ClassicAssert.AreEqual(newOption, mockPoll.Object.Options[2]);
+            ClassicAssert.AreEqual(newOption, TestViewModel.ThirdPossibleOptionOfThePoll);
+            ClassicAssert.AreEqual(newOption, MockPoll.Object.GroupPollOptions[2]);
         }
 
         [Test]
         public void FourthPossibleOptionOfThePollTest()
         {
             string newOption = "New Option 4";
-            testViewModel.FourthPossibleOptionOfThePoll = newOption;
+            TestViewModel.FourthPossibleOptionOfThePoll = newOption;
 
-            ClassicAssert.AreEqual(newOption, testViewModel.FourthPossibleOptionOfThePoll);
-            ClassicAssert.AreEqual(newOption, mockPoll.Object.Options[3]);
+            ClassicAssert.AreEqual(newOption, TestViewModel.FourthPossibleOptionOfThePoll);
+            ClassicAssert.AreEqual(newOption, MockPoll.Object.GroupPollOptions[3]);
         }
     }
 }

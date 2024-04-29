@@ -19,11 +19,11 @@ namespace Test_UBB_SE_2024_Popsicles.MainWindowViewTests
         [SetUp]
         public void Setup()
         {
-            mockGroup1 = new Mock<Group>(It.IsAny<Guid>(), It.IsAny<Guid>(), "Group Name", "test", It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<string>());
-            mockGroup2 = new Mock<Group>(It.IsAny<Guid>(), It.IsAny<Guid>(), "Group Name", It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<string>());
-            mockGroup3 = new Mock<Group>(It.IsAny<Guid>(), It.IsAny<Guid>(), "Group Name", It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<string>());
-            mockGroup4 = new Mock<Group>(It.IsAny<Guid>(), It.IsAny<Guid>(), "Group Name", It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<string>());
-            mockGroup5 = new Mock<Group>(It.IsAny<Guid>(), It.IsAny<Guid>(), "Group Name", It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<string>());
+            mockGroup1 = new Mock<Group>(It.IsAny<Guid>(), It.IsAny<Guid>(), "Group GroupName", "test", It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<string>());
+            mockGroup2 = new Mock<Group>(It.IsAny<Guid>(), It.IsAny<Guid>(), "Group GroupName", It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<string>());
+            mockGroup3 = new Mock<Group>(It.IsAny<Guid>(), It.IsAny<Guid>(), "Group GroupName", It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<string>());
+            mockGroup4 = new Mock<Group>(It.IsAny<Guid>(), It.IsAny<Guid>(), "Group GroupName", It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<string>());
+            mockGroup5 = new Mock<Group>(It.IsAny<Guid>(), It.IsAny<Guid>(), "Group GroupName", It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<string>());
             mockUser = new Mock<GroupMember>(It.IsAny<Guid>(),"testName","testDescription","testMail","testPhone","test");
             mockGroups.Add(mockGroup1.Object);
             mockGroups.Add(mockGroup2.Object);
@@ -44,7 +44,7 @@ namespace Test_UBB_SE_2024_Popsicles.MainWindowViewTests
             // Assert
             ClassicAssert.AreEqual(mockGroups, actualGroups); // Assert they are the same object reference
             ClassicAssert.AreEqual(5, actualGroups.Count); // Assert the number of groups
-            ClassicAssert.AreEqual("Group Name", testView.CollectionOfActiveGroups[0].GroupName);
+            ClassicAssert.AreEqual("Group GroupName", testView.CollectionOfActiveGroups[0].GroupName);
         }
 
 
@@ -86,7 +86,7 @@ namespace Test_UBB_SE_2024_Popsicles.MainWindowViewTests
         {
             Group actualGroup = testView.CurrentlySelectedGroup;
             ClassicAssert.AreEqual(actualGroup, mockGroups[0]);
-            ClassicAssert.AreEqual("Group Name", testView.CurrentlySelectedGroup.GroupName);
+            ClassicAssert.AreEqual("Group GroupName", testView.CurrentlySelectedGroup.GroupName);
             ClassicAssert.AreEqual("test", testView.CurrentlySelectedGroup.GroupDescription);
         }
 
