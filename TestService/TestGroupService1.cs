@@ -34,7 +34,7 @@ namespace Test_UBB_SE_2024_Popsicles.TestService
                 requestsRepositoryMock.Object);
         }
 
-        public (Group, GroupMember) CreateGroupFactory(bool bypassesPostageRestriction = false)
+        public (Group, GroupMember) CreateGroupFactory(bool bypassesPostageRestriction = false, bool allowanceOfPostage = false, int maximumNuberOfPostPerHour = 5)
         {
             Guid groupId = Guid.NewGuid();
             Guid groupMemberId = Guid.NewGuid();
@@ -47,11 +47,11 @@ namespace Test_UBB_SE_2024_Popsicles.TestService
                 groupMember.UserName, groupId, "Test Group Member Role", DateTime.Now, false, false, bypassesPostageRestriction);
 
             Group group = new Group(groupId, groupMemberId, "Test Name", "Test Description", "Test Icon", "Test Banner",
-                5, true, true, "Test Code");
+                maximumNuberOfPostPerHour, true, allowanceOfPostage, "Test Code");
 
             group.AddMember(groupMembership);
 
-            groupRepositoryMock.Setup(repository => repository.GetGroupById(It.IsAny<Guid>())).Returns(group);
+            groupRepositoryMock.Setup(repository => repository.GetGroupById(groupId)).Returns(group);
 
             return (group, groupMember);
         }
@@ -59,7 +59,6 @@ namespace Test_UBB_SE_2024_Popsicles.TestService
         public GroupMember CreateGroupMemberFactory()
         {
             Guid groupMemberId = Guid.NewGuid();
-            Guid groupMembershipId = Guid.NewGuid();
 
             GroupMember groupMember = new GroupMember(groupMemberId, "Test User", "Test Password", "Test Email",
                 "Test Phone number", "Test Description");
@@ -101,7 +100,7 @@ namespace Test_UBB_SE_2024_Popsicles.TestService
             // Arange
             Group group;
             GroupMember groupMember;
-            (group, groupMember) = CreateGroupFactory(bypassesPostageRestriction: true);
+            (group, groupMember) = CreateGroupFactory(allowanceOfPostage: true);
             Guid groupId = group.GroupId;
             Guid groupMemberId = groupMember.UserId;
             string postContent = "Test post";
@@ -120,7 +119,7 @@ namespace Test_UBB_SE_2024_Popsicles.TestService
             // Arrange
             Group group;
             GroupMember groupMember;
-            (group, groupMember) = CreateGroupFactory(bypassesPostageRestriction: true);
+            (group, groupMember) = CreateGroupFactory();
             Guid groupId = group.GroupId;
             Guid groupMemberId = groupMember.UserId;
 
@@ -137,7 +136,7 @@ namespace Test_UBB_SE_2024_Popsicles.TestService
             // Arrange
             Group group;
             GroupMember groupMember;
-            (group, groupMember) = CreateGroupFactory(bypassesPostageRestriction: true);
+            (group, groupMember) = CreateGroupFactory(maximumNuberOfPostPerHour: 0);
             Guid groupId = group.GroupId;
             Guid groupMemberId = groupMember.UserId;
 
@@ -149,6 +148,40 @@ namespace Test_UBB_SE_2024_Popsicles.TestService
             catch (Exception expectedException)
             {
                 ClassicAssert.That(expectedException.Message, Is.EqualTo("Post limit exceeded"));
+            }
+        }
+
+        [Test]
+        public void CreateNewPostOnGroupChat_InvalidGroupId_ExceptionThrown()
+        {
+            Guid groupId = Guid.NewGuid();
+            groupRepositoryMock.Setup(mockRepository => mockRepository.GetGroupById(groupId)).Throws(new Exception("Group not found"));
+
+            try
+            {
+                groupService.CreateNewPostOnGroupChat(groupId, Guid.NewGuid(), "Test Post", "Test image");
+            }
+            catch (Exception expectedException)
+            {
+                Assert.That(expectedException.Message, Is.EqualTo("Group not found"));
+            }
+        }
+
+        [Test]
+        public void CreateNewPostOnGroupChat_MemberNotInGroup_ExceptionThrown()
+        {
+            Group group;
+            GroupMember groupOwner;
+            (group, groupOwner) = CreateGroupFactory();
+            GroupMember memberNotPartOfGroup = CreateGroupMemberFactory();
+
+            try
+            {
+                groupService.CreateNewPostOnGroupChat(group.GroupId, memberNotPartOfGroup.UserId, "Test post", "Test image");
+            }
+            catch (Exception expectedException)
+            {
+                Assert.That(expectedException.Message, Is.EqualTo("Membership not found"));
             }
         }
 
