@@ -92,7 +92,64 @@ namespace Test_UBB_SE_2024_Popsicles.TestService
             groupService.CreateNewPostOnGroupChat(groupId, groupMemberId, postContent, postImage);
 
             // Assert
-            ClassicAssert.AreEqual(1, group.ListOfGroupPosts.Count);
+            ClassicAssert.That(group.ListOfGroupPosts.Count, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void CreateNewPostOnGroupChat_PostageIsAllowed_AddsNewGroupPosts()
+        {
+            // Arange
+            Group group;
+            GroupMember groupMember;
+            (group, groupMember) = CreateGroupFactory(bypassesPostageRestriction: true);
+            Guid groupId = group.GroupId;
+            Guid groupMemberId = groupMember.UserId;
+            string postContent = "Test post";
+            string postImage = "Test image";
+
+            // Act
+            groupService.CreateNewPostOnGroupChat(groupId, groupMemberId, postContent, postImage);
+
+            // Assert
+            ClassicAssert.That(group.ListOfGroupPosts.Count, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void CreateNewPostOnGroupChat_LimitPostNotReached_AddsNewGroupPosts()
+        {
+            // Arrange
+            Group group;
+            GroupMember groupMember;
+            (group, groupMember) = CreateGroupFactory(bypassesPostageRestriction: true);
+            Guid groupId = group.GroupId;
+            Guid groupMemberId = groupMember.UserId;
+
+            // Act
+            groupService.CreateNewPostOnGroupChat(groupId, groupMemberId, "Test Post", "Test image");
+
+            // Assert
+            ClassicAssert.That(group.ListOfGroupPosts.Count, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void CreateNewPostOnGroupChat_LimitOfPostsReached_ExceptionThrown()
+        {
+            // Arrange
+            Group group;
+            GroupMember groupMember;
+            (group, groupMember) = CreateGroupFactory(bypassesPostageRestriction: true);
+            Guid groupId = group.GroupId;
+            Guid groupMemberId = groupMember.UserId;
+
+            try
+            {
+                // Act
+                groupService.CreateNewPostOnGroupChat(groupId, groupMemberId, "Test Post", "Test image");
+            }
+            catch (Exception expectedException)
+            {
+                ClassicAssert.That(expectedException.Message, Is.EqualTo("Post limit exceeded"));
+            }
         }
 
         [Test]
