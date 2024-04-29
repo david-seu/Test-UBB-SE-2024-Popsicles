@@ -307,5 +307,55 @@ namespace Test_UBB_SE_2024_Popsicles.TestService
             Assert.Throws<Exception>(() => groupService.RemoveMemberFromGroup(groupMember.UserId, group.GroupId));
         }
 
+        [Test]
+        public void AddNewRequestToJoinGroup_ValidGroupIdAndValidGroupMemberId_MemberNotFoundException()
+        {
+            Group group;
+            GroupMember groupOwner;
+            (group, groupOwner) = CreateGroupFactory();
+
+            Guid invalidUserId = Guid.NewGuid();
+            groupMemberRepositoryMock.Setup(mockRepository => mockRepository.GetGroupMemberById(invalidUserId)).Throws(new Exception("Group member not found"));
+
+            try
+            {
+                groupService.AddNewRequestToJoinGroup(invalidUserId, group.GroupId);
+            }
+            catch (Exception expectedException)
+            {
+                Assert.That(expectedException.Message, Is.EqualTo("Group member not found"));
+            }
+        }
+
+        [Test]
+        public void AddNewRequestToJoinGroup_InvalidGroupIdAndValidMemberId_GroupNotFoundException()
+        {
+            Guid invalidGroupId = Guid.NewGuid();
+            groupRepositoryMock.Setup(mockRepository => mockRepository.GetGroupById(invalidGroupId)).Throws(new Exception("Group not found"));
+            GroupMember groupMember = CreateGroupMemberFactory();
+            groupMemberRepositoryMock.Setup(mockRepository => mockRepository.GetGroupMemberById(groupMember.UserId)).Returns(groupMember);
+
+            try
+            {
+                groupService.AddNewRequestToJoinGroup(groupMember.UserId, invalidGroupId);
+            }
+            catch (Exception expectedException)
+            {
+                Assert.That(expectedException.Message, Is.EqualTo("Group not found"));
+            }
+        }
+
+        [Test]
+        public void AddNewRequestToJoinGroup_ValidGroupIdAndValidMemberId_JoinRequestAdded()
+        {
+            Group group;
+            GroupMember groupOwner;
+            (group, groupOwner) = CreateGroupFactory();
+            GroupMember groupMember = CreateGroupMemberFactory();
+            groupMemberRepositoryMock.Setup(mockRepository => mockRepository.GetGroupMemberById(groupMember.UserId)).Returns(groupMember);
+
+            groupService.AddNewRequestToJoinGroup(groupMember.UserId, group.GroupId);
+            Assert.That(group.ListOfJoinRequests.Count, Is.EqualTo(1));
+        }
     }
 }
