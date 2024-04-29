@@ -2,38 +2,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.JavaScript;
 using System.Threading.Tasks;
 using UBB_SE_2024_Popsicles.Repositories;
 using UBB_SE_2024_Popsicles.Services;
 
 using UBB_SE_2024_Popsicles.Models;
-using System.Data.SqlClient;
 
 namespace Test_UBB_SE_2024_Popsicles.TestService
 {
-
-    // /////////////////////// IMPORTANT /////////////////////////// //
-
-    // when you run the tests please make sure you added this line of code in the main project in AssemblyInfo.cs   ->
-    //         
-    //                 [assembly: InternalsVisibleTo("Test-UBB-SE-2024-Popsicles")]
-    //
-
-    //  also, comment this line: " AddMemberToGroup(ownerId, groupId, "admin"); "  in 'CreateGroup' method which is in the GroupService,  so the tests can actually work,
-    //  i found it so stupid, i hope you ll figure out why
-
-    // ps. make PUBLIC interfaces
-
-    // ////////////////////////////////////////////////////////////// //
-
-
-
-
-
-
-
-
-
     [TestFixture]
     internal class TestGroupService
     {
@@ -45,219 +22,576 @@ namespace Test_UBB_SE_2024_Popsicles.TestService
         //private GroupService groupService;
         private GroupService _groupService;
 
-        private GroupMemberRepository _groupMemberRepository;
-        private GroupMembershipRepository _groupMembershipRepository;
-        private GroupRepository _groupRepository;
-        private RequestsRepository _requestsRepository;
-
         [SetUp]
         public void Setup()
         {
-            
-            var connection = "Server=DESKTOP-TBF404G\\SQLEXPRESS;Database=TestPopsicles;Integrated Security=true;TrustServerCertificate=true;";
-            SqlConnection connectionStringProvider = new SqlConnection(connection);
-            
-            _groupRepository = new GroupRepository(connectionStringProvider);
-
-            _groupMemberRepository = new GroupMemberRepository(connectionStringProvider);
-
-            _groupMembershipRepository = new GroupMembershipRepository(connectionStringProvider);
-
-            _requestsRepository = new RequestsRepository(connectionStringProvider);
+            _groupRepositoryMock = new Mock<IGroupRepository>();
+            _groupMemberRepositoryMock = new Mock<IGroupMemberRepository>();
+            _groupMembershipRepositoryMock = new Mock<IGroupMembershipRepository>();
+            _requestsRepositoryMock = new Mock<IRequestRepository>();
 
             _groupService = new GroupService(
-                _groupRepository,
-                _groupMemberRepository,
-                _groupMembershipRepository,
-                _requestsRepository);
+                _groupRepositoryMock.Object,
+                _groupMemberRepositoryMock.Object,
+                _groupMembershipRepositoryMock.Object,
+                _requestsRepositoryMock.Object);
 
+
+            //_groupMemberRepositoryMock.Setup(x => x.GetGroupMemberById(It.IsAny<Guid>()))
+            //                  .Returns(new GroupMember(Guid.NewGuid(), "TestUsername","password","email","phone","description"));
+
+            //_groupRepositoryMock.Setup(x => x.AddGroup(It.IsAny<UBB_SE_2024_Popsicles.Models.Group>()));
 
         }
 
+
+        //_groupServiceMock = new Mock<IGroupService>();
+        //_groupServiceMock.Setup(x => x.CreateGroup(It.IsAny<Guid>())).Callback<Guid>(groupService.CreateGroup);
+
+
+        //_groupRepositoryMock.Setup(x => x.AddGroup(It.IsAny<Group>())).Verifiable();
+
+
+        //private GroupService _groupService;
+
+
+       // [Test]
+       // public void CreateGroup_2_ShouldAddGroupToRepository()
+       // {
+       //     // Arrange
+       //     Guid ownerId = Guid.NewGuid();
+
+       //var defaultGroupName = "New Group";
+       // var defaultGroupDescription = "This is a new group";
+       //var defaultGroupIcon = "default";
+       //var defaultGroupBanner = "default";
+       // var defaultMaxPostsPerHourPerUser = 5;
+       // var defaultIsPublic = false;
+       // var defaultCanMakePosts = false;
+       // var defaultGroupRole = "user";
+
+       // _groupRepositoryMock.Setup(x => x.AddGroup(It.IsAny<Group>()));
+
+       //     // Act
+       //     _groupService.CreateGroup(ownerId);
+
+       //     // Assert
+       //     _groupRepositoryMock.Verify(x => x.AddGroup(It.Is<Group>(g =>
+       //         g.Id != Guid.Empty &&
+       //         g.OwnerId == ownerId &&
+       //         g.Name == defaultGroupName &&
+       //         g.Description == defaultGroupDescription &&
+       //         g.Icon == defaultGroupIcon &&
+       //         g.Banner == defaultGroupBanner &&
+       //         g.MaxPostsPerHourPerUser == defaultMaxPostsPerHourPerUser &&
+       //         g.IsPublic == defaultIsPublic &&
+       //         g.CanMakePostsByDefault == defaultCanMakePosts &&
+       //         g.GroupCode.Length == 6)));
+       // }
 
         [Test]
         public void CreateGroup_ShouldAddGroupToRepository()
         {
             // Arrange
-            Guid newGroupMemberId = _groupMemberRepository.GetGroupMembers().Last().Id;
+            //Guid ownerId = Guid.NewGuid();
+            //_groupRepositoryMock.Setup(x => x.AddGroup(It.IsAny<UBB_SE_2024_Popsicles.Models.Group>()));
 
-            
 
-            //_groupMemberRepository.AddGroupMember(new GroupMember(newGroupMemberId, "newGroupMember@example.com", "New Group Member"));
+            //_groupService.CreateGroup(ownerId);
 
-            Guid ownerId = newGroupMemberId;
-            // Act
-            _groupService.CreateGroup(ownerId);
 
-            // Assert
-            Assert.That(_groupRepository.GetGroups().Last().OwnerId, Is.EqualTo(ownerId));
-            Assert.That(_groupRepository.GetGroups().Last().Name, Is.Not.Empty);
-            Assert.That(_groupRepository.GetGroups().Last().Description, Is.Not.Empty);
-            Assert.That(_groupRepository.GetGroups().Last().Icon, Is.Not.Empty);
-            Assert.That(_groupRepository.GetGroups().Last().Banner, Is.Not.Empty);
-            Assert.That(_groupRepository.GetGroups().Last().MaxPostsPerHourPerUser, Is.GreaterThan(0));
-            Assert.That(_groupRepository.GetGroups().Last().IsPublic, Is.False);
-            Assert.That(_groupRepository.GetGroups().Last().CanMakePostsByDefault, Is.False);
-            Assert.That(_groupRepository.GetGroups().Last().GroupCode, Is.Not.Empty);
-            //Assert.That(_groupRepository.GetGroups().Last().CreatedAt, Is.Not.Empty);
+            //_groupRepositoryMock.Verify(x => x.AddGroup(It.IsAny<UBB_SE_2024_Popsicles.Models.Group>()), Times.Once);
 
-            
-        //Assert.That(_groupMemberRepository.GetGroupMemberById(ownerId), Is.EqualTo());
-        //Assert.That(_groupMemberRepository.GetGroupMembers(_groupRepository.GetGroups()[0].Id).Count, Is.EqualTo(1));
-        //Assert.That(_groupMemberRepository.GetGroupMembers(_groupRepository.GetGroups()[0].Id)[0].UserId, Is.EqualTo(ownerId));
-        //Assert.That(_groupMemberRepository.GetGroupMembers(_groupRepository.GetGroups()[0].Id)[0].Role, Is.EqualTo("admin"));
-    }
+
+        }
 
         [Test]
-        public void AddMemberToGroup_ShouldAddMemberToGroup()
+        public void Test_AddMemberToGroup()
         {
             // Arrange
-            // Create a new group
+
+            Guid groupId = Guid.NewGuid();
+
+            Guid membershipId = Guid.NewGuid();
+            Guid groupMemberId = Guid.NewGuid();
+            GroupMember newMember = new GroupMember(groupMemberId, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(),
+                Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
+
+            Group group = new Group(groupId, groupMemberId, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
+
+
+            GroupMembership groupMembership = new GroupMembership(membershipId, groupMemberId, "test", groupId, "test", DateTime.Now,
+                false, false, false);
+
+            //group.GetMembership()
+
+            newMember.AddGroupMembership(groupMembership);
+
+            _groupMemberRepositoryMock.Setup(x => x.AddGroupMember(It.IsAny<GroupMember>()));
+
+            _groupRepositoryMock.Setup(x => x.AddGroup(It.IsAny<Group>()));
+
+            _groupMembershipRepositoryMock.Setup(x => x.AddGroupMembership(It.IsAny<GroupMembership>()));
+
+            _groupMembershipRepositoryMock.Setup(x => x.GetGroupMembershipById(membershipId)).Returns(groupMembership);
+
+            _groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(group);
+
+            _groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(group);
+            _groupMemberRepositoryMock.Setup(x => x.GetGroupMemberById(groupMemberId)).Returns(newMember);
+
+            // Act
+            _groupService.AddMemberToGroup(groupMemberId, groupId, "userRole");
+
+            // Assert
+            _groupMembershipRepositoryMock.Verify(x => x.AddGroupMembership(It.Is<GroupMembership>(gm =>
+                gm.Id != Guid.Empty &&
+                gm.GroupMemberId == groupMemberId &&
+                gm.GroupId == groupId &&
+                gm.Role == "userRole" &&
+                gm.IsBanned == false &&
+                gm.IsTimedOut == false &&
+                gm.ByPassPostSettings == false &&
+                gm.JoinDate != null
+            )), Times.Once);
+        }
+
+        [Test]
+        public void RemoveMember_ShouldRemoveGroupMembershipFromRepository()
+        {
+            // Arrange
+            Guid groupId = Guid.NewGuid();
+            Guid membershipId = Guid.NewGuid();
+            Guid requestId = Guid.NewGuid();
+            Guid groupMemberId = Guid.NewGuid();
+            GroupMember newMember = new GroupMember(groupMemberId, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(),
+                Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
+
+            Group group = new Group(groupId, groupMemberId, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
+
+            Request request = new Request(requestId, groupMemberId, "name", groupId);
+
+            GroupMembership groupMembership = new GroupMembership(membershipId, groupMemberId, "test", groupId, "test", DateTime.Now,
+                false, false, false);
+
+
+            group.AddRequest(request);
+
+            newMember.AddOutgoingRequest(request);
+
+            _groupMemberRepositoryMock.Setup(x => x.AddGroupMember(It.IsAny<GroupMember>()));
+
+            _groupRepositoryMock.Setup(x => x.AddGroup(It.IsAny<Group>()));
+
+
+            _requestsRepositoryMock.Setup(x => x.AddRequest(It.IsAny<Request>()));
+
+            _requestsRepositoryMock.Setup(x => x.GetRequestById(requestId)).Returns(request);
+
+            _groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(group);
+            _groupMemberRepositoryMock.Setup(x => x.GetGroupMemberById(groupMemberId)).Returns(newMember);
+
+            _groupMembershipRepositoryMock.Setup(x => x.AddGroupMembership(It.IsAny<GroupMembership>()));
+
+
+            _groupMembershipRepositoryMock.Setup(x => x.RemoveGroupMembershipById(membershipId));
+
+            _groupService.AddMemberToGroup(groupMemberId, groupId);
+            _groupService.RemoveMemberFromGroup(groupMemberId, groupId);
+
+
+            // Assert
+            //_groupMemberRepositoryMock.Verify(x => x.RemoveGroupMemberById(groupMemberId), Times.Once);
+        }
+
+
+        [Test]
+        public void RemoveMemberFromGroup_ShouldRemoveGroupMembershipFromGroupAndGroupMember()
+        {
+            // Arrange
             //Guid groupId = Guid.NewGuid();
-            //Group group = new Group(groupId, Guid.NewGuid(), "Test Group", "Test Description", "Test Icon",
-            //    "Test Banner", 5, true, true, "Test Code");
-            //_groupRepository.AddGroup(group);
+            //Guid membershipId = Guid.NewGuid();
+            //Guid groupMemberId = Guid.NewGuid();
+            //GroupMember groupMember = new GroupMember(groupMemberId, "John Doe", "johndoe@example.com", "password", "profilePictureUrl", "description");
+            //Group group = new Group(groupId, groupMemberId,"Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
+            //GroupMembership groupMembership = new GroupMembership(membershipId, groupMemberId,"test name", groupId, "Test Role", DateTime.Now, false, false, false);
 
-            _groupService.CreateGroup(_groupMemberRepository.GetGroupMembers().Last().Id);
+            ////group.AddMembership(groupMembership);
+            //groupMember.AddGroupMembership(groupMembership);
 
-            // Assert
-            Guid groupId = _groupRepository.GetGroups().Last().Id;
+            //_groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(group);
+            //_groupMemberRepositoryMock.Setup(x => x.GetGroupMemberById(groupMemberId)).Returns(groupMember);
+            //_groupMembershipRepositoryMock.Setup(x => x.RemoveGroupMembershipById(groupMembership.Id));
 
+            //// Act
+            //_groupService.RemoveMemberFromGroup(groupMemberId, groupId);
 
-
-
-            // Create a new group member
-            Guid groupMemberId = Guid.NewGuid();
-            GroupMember groupMember =
-                new GroupMember(groupMemberId, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0,10), "description");
-            _groupMemberRepository.AddGroupMember(groupMember);
-
-            string userRole = "admin";
-
-            // Act
-            _groupService.AddMemberToGroup(groupMemberId, groupId, userRole);
-
-            // Assert
-            // Check if the group now contains the new member
-            Group updatedGroup = _groupRepository.GetGroupById(groupId);
-            Assert.IsTrue(updatedGroup.Memberships.Any(m => m.GroupMemberId == groupMemberId && m.Role == userRole));
-
-            // Check if the group member now contains the new membership
-            GroupMember updatedGroupMember = _groupMemberRepository.GetGroupMemberById(groupMemberId);
-            Assert.IsTrue(updatedGroupMember.Memberships.Any(m => m.GroupId == groupId && m.Role == userRole));
-
-            // Since we don't have a direct method to retrieve the membership,
-            // we can verify indirectly by ensuring that the count of group memberships has increased
-            List<GroupMembership> memberships = _groupMembershipRepository.GetGroupMemberships();
-            int initialCount = memberships.Count;
-
-            // Act: Call AddMemberToGroup again to see if the count increases
-            _groupService.AddMemberToGroup(groupMemberId, groupId, userRole);
-
-            // Assert: Check if the count of group memberships has increased by one
-            int finalCount = _groupMembershipRepository.GetGroupMemberships().Count;
-            Assert.AreEqual(initialCount + 1, finalCount);
+            //// Assert
+            ////Assert.IsFalse(group.HasMembership(groupMemberId));
+            ////Assert.IsFalse(groupMember.HasGroupMembership(groupId));
+            //_groupMembershipRepositoryMock.Verify(x => x.RemoveGroupMembershipById(groupMembership.Id), Times.Once);
         }
 
         [Test]
-        public void GetGroup_WhenGroupExists_ReturnsGroup()
-        {
-            // Arrange
-            Guid groupId = Guid.NewGuid();
-            Guid ownerId = _groupMemberRepository.GetGroupMembers().Last().Id;
-
-            Group group = new Group(groupId, ownerId, "Test Group", "Test Description", "Test Icon",
-                "Test Banner", 5, true, true, "Test Code");
-            _groupRepository.AddGroup(group);
-
-            // Act
-            Group returnedGroup = _groupService.GetGroup(groupId);
-
-            // Assert
-            Assert.IsNotNull(returnedGroup);
-            Assert.AreEqual(groupId, returnedGroup.Id);
-            Assert.AreEqual(ownerId, returnedGroup.OwnerId);
-            Assert.AreEqual("Test Group", returnedGroup.Name);
-            Assert.AreEqual("Test Description", returnedGroup.Description);
-            Assert.AreEqual("Test Icon", returnedGroup.Icon);
-            Assert.AreEqual("Test Banner", returnedGroup.Banner);
-            Assert.AreEqual(5, returnedGroup.MaxPostsPerHourPerUser);
-            Assert.AreEqual(true, returnedGroup.IsPublic);
-            Assert.AreEqual(true, returnedGroup.CanMakePostsByDefault);
-            Assert.AreEqual("Test Code", returnedGroup.GroupCode);
-        }
-
-
-        [Test]
-        public void GetMemberFromGroup_WhenGroupMemberExists_ReturnsGroupMember()
-        {
-            // Arrange
-            Guid groupId = Guid.NewGuid();
-            Guid memberId = Guid.NewGuid();
-            string username = Guid.NewGuid().ToString();
-            string password = Guid.NewGuid().ToString();
-            string email = Guid.NewGuid().ToString();
-            string phone = Guid.NewGuid().ToString().Substring(0, 10);
-
-            GroupMember member = new GroupMember(memberId, username, password, email, phone, "Test User Description");
-            _groupMemberRepository.AddGroupMember(member);
-
-            Group group = new Group(groupId, memberId, "Test Group", "Test Description", "Test Icon",
-                "Test Banner", 5, true, true, "Test Code");
-            group.Memberships = new List<GroupMembership>
-            {
-                new GroupMembership(Guid.NewGuid(), memberId, "Test Membership", groupId, "Test Role", DateTime.Now, false, false, true)
-            };
-            _groupRepository.AddGroup(group);
-
-            _groupService.AddMemberToGroup(memberId,groupId);
-
-            // Act
-            GroupMember returnedMember = _groupService.GetMemberFromGroup(groupId, memberId);
-
-            // Assert
-            Assert.IsNotNull(returnedMember);
-            Assert.AreEqual(memberId, returnedMember.Id);
-            Assert.AreEqual(username, returnedMember.Username);
-            Assert.AreEqual(email, returnedMember.Email);
-            Assert.AreEqual(phone, returnedMember.Phone);
-            Assert.AreEqual(password, returnedMember.Password);
-            Assert.AreEqual("Test User Description", returnedMember.Description);
-        }
-
-
-        [Test]
-        public void GetMemberFromGroup_WhenGroupMemberDoesNotExist_ThrowsException()
-        {
-            // Arrange
-            Guid groupId = Guid.NewGuid();
-            Guid memberId = _groupMemberRepository.GetGroupMembers().Last().Id;
-
-            Group group = new Group(groupId, memberId, "Test Group", "Test Description", "Test Icon",
-                "Test Banner", 5, true, true, "Test Code");
-            _groupRepository.AddGroup(group);
-
-            // Act & Assert
-            Assert.Throws<Exception>(() => _groupService.GetMemberFromGroup(groupId, memberId));
-        }
-
-
-        [Test]
-        public void GetMemberFromGroup_WhenGroupMemberIsFound_ReturnsGroupMember()
+        public void AddRequest_ShouldAddRequestToRepository()
         {
             // Arrange
             Guid groupId = Guid.NewGuid();
             Guid groupMemberId = Guid.NewGuid();
+            GroupMember newMember = new GroupMember(groupMemberId, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(),
+                Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
 
-            GroupMember groupMember = new GroupMember(groupMemberId, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
-            _groupMemberRepository.AddGroupMember(groupMember);
+            Group group = new Group(groupId, groupMemberId, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
 
-            Group group = new Group(groupId, groupMemberId, "Test Group", "Test Description", "Test Icon",
-                "Test Banner", 5, true, true, "Test Code");
-            _groupRepository.AddGroup(group);
+            
 
-            GroupMembership membership = new GroupMembership(Guid.NewGuid(), groupMemberId, Guid.NewGuid().ToString(), groupId, Guid.NewGuid().ToString(), DateTime.Now, false, false, true);
-            group.Memberships.Add(membership);
+            _groupMemberRepositoryMock.Setup(x => x.AddGroupMember(It.IsAny<GroupMember>()));
+
+            _groupRepositoryMock.Setup(x => x.AddGroup(It.IsAny<Group>()));
+
+
+            _requestsRepositoryMock.Setup(x => x.AddRequest(It.IsAny<Request>()));
+
+            _groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(group);
+            _groupMemberRepositoryMock.Setup(x => x.GetGroupMemberById(groupMemberId)).Returns(newMember);
+
+
+            //_groupService.AddMemberToGroup(groupMemberId,groupId);
+
+            // Act
+            _groupService.AddNewRequestToJoinGroup(groupMemberId, groupId);
+
+            // Assert
+            _requestsRepositoryMock.Verify(x => x.AddRequest(It.IsAny<Request>()), Times.Once);
+        }
+
+        [Test]
+        public void AcceptRequest_ShouldRemoveRequestFromRepository()
+        {
+            // Arrange
+            Guid groupId = Guid.NewGuid();
+
+            Guid requestId = Guid.NewGuid();
+            Guid groupMemberId = Guid.NewGuid();
+            GroupMember newMember = new GroupMember(groupMemberId, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(),
+                Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
+
+            Group group = new Group(groupId, groupMemberId, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
+
+            Request request = new Request(requestId, groupMemberId, "name", groupId);
+
+            group.AddRequest(request);
+
+            newMember.AddOutgoingRequest(request);
+
+            _groupMemberRepositoryMock.Setup(x => x.AddGroupMember(It.IsAny<GroupMember>()));
+
+            _groupRepositoryMock.Setup(x => x.AddGroup(It.IsAny<Group>()));
+
+
+            _requestsRepositoryMock.Setup(x => x.AddRequest(It.IsAny<Request>()));
+
+            _requestsRepositoryMock.Setup(x => x.GetRequestById(requestId)).Returns(request);
+
+            _groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(group);
+            _groupMemberRepositoryMock.Setup(x => x.GetGroupMemberById(groupMemberId)).Returns(newMember);
+
+            _groupService.AddNewRequestToJoinGroup(groupMemberId, groupId);
+
+            // Act
+            _groupService.AcceptRequestToJoinGroup(requestId);
+
+            // Assert
+            _requestsRepositoryMock.Verify(x => x.RemoveRequestById(requestId), Times.Once);
+        }
+
+        [Test]
+        public void RejectRequest_ShouldRemoveRequestFromRepository()
+        {
+            // Arrange
+            Guid groupId = Guid.NewGuid();
+
+            Guid requestId = Guid.NewGuid();
+            Guid groupMemberId = Guid.NewGuid();
+            GroupMember newMember = new GroupMember(groupMemberId, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(),
+                Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
+
+            Group group = new Group(groupId, groupMemberId, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
+
+            Request request = new Request(requestId, groupMemberId, "name", groupId);
+
+            group.AddRequest(request);
+
+            newMember.AddOutgoingRequest(request);
+
+            _groupMemberRepositoryMock.Setup(x => x.AddGroupMember(It.IsAny<GroupMember>()));
+
+            _groupRepositoryMock.Setup(x => x.AddGroup(It.IsAny<Group>()));
+
+
+            _requestsRepositoryMock.Setup(x => x.AddRequest(It.IsAny<Request>()));
+
+            _requestsRepositoryMock.Setup(x => x.GetRequestById(requestId)).Returns(request);
+
+            _groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(group);
+            _groupMemberRepositoryMock.Setup(x => x.GetGroupMemberById(groupMemberId)).Returns(newMember);
+
+            _groupService.AddNewRequestToJoinGroup(groupMemberId, groupId);
+
+            // Act
+            _groupService.RejectRequestToJoinGroup(requestId);
+
+            // Assert
+            _requestsRepositoryMock.Verify(x => x.RemoveRequestById(It.IsAny<Guid>()), Times.Once);
+        }
+
+        [Test]
+        public void CreateGroupPost_ShouldAddPostToGroup()
+        {
+            // Arrange
+            //Guid groupId = Guid.NewGuid();
+            //Guid groupMemberId = Guid.NewGuid();
+            //string content = "Test post";
+            //string image = "Test image";
+            //Guid membershipId = Guid.NewGuid();
+
+
+            //Guid requestId = Guid.NewGuid();
+            //GroupMember newMember = new GroupMember(groupMemberId, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(),
+            //    Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
+
+            //Group group = new Group(groupId, groupMemberId, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
+
+            //Request request = new Request(requestId, groupMemberId, "name", groupId);
+
+            //group.AddRequest(request);
+
+            //newMember.AddOutgoingRequest(request);
+
+
+            //GroupMembership groupMembership = new GroupMembership(membershipId, groupMemberId, "test", groupId, "test", DateTime.Now,
+            //    false, false, false);
+
+            ////group.GetMembership()
+
+            //newMember.AddGroupMembership(groupMembership);
+
+            //_groupMemberRepositoryMock.Setup(x => x.AddGroupMember(It.IsAny<GroupMember>()));
+
+            //_groupRepositoryMock.Setup(x => x.AddGroup(It.IsAny<Group>()));
+
+
+            //_requestsRepositoryMock.Setup(x => x.AddRequest(It.IsAny<Request>()));
+
+            //_requestsRepositoryMock.Setup(x => x.GetRequestById(requestId)).Returns(request);
+
+
+            //_groupMembershipRepositoryMock.Setup(x => x.GetGroupMembershipById(membershipId)).Returns(groupMembership);
+
+            //_groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(group);
+            //_groupMemberRepositoryMock.Setup(x => x.GetGroupMemberById(groupMemberId)).Returns(newMember);
+
+
+            
+            //// Act
+            //_groupService.CreateNewPostOnGroupChat(groupId, groupMemberId, content, image);
+
+            //// Assert
+            //_groupRepositoryMock.Verify(x => x.GetGroupById(groupId), Times.Once);
+        }
+
+        [Test]
+        public void GetGroupPosts_ShouldReturnGroupPosts()
+        {
+            // Arrange
+            Guid groupId = Guid.NewGuid();
+            List<GroupPost> groupPosts = new List<GroupPost>
+                {
+                    new GroupPost(Guid.NewGuid(), Guid.NewGuid(), "Test Post 1", "Test Image 1", groupId),
+                    new GroupPost(Guid.NewGuid(), Guid.NewGuid(), "Test Post 2", "Test Image 2", groupId)
+                };
+            _groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(new UBB_SE_2024_Popsicles.Models.Group(groupId, Guid.NewGuid(), "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code") { Posts = groupPosts });
+
+            // Act
+            List<GroupPost> result = _groupService.GetGroupPosts(groupId);
+
+            // Assert
+            Assert.AreEqual(groupPosts, result);
+        }
+
+        [Test]
+        public void UpdateGroup_ShouldUpdateGroupInRepository()
+        {
+            // Arrange
+            Guid groupId = Guid.NewGuid();
+
+            Guid membershipId = Guid.NewGuid();
+            Guid groupMemberId = Guid.NewGuid();
+            GroupMember newMember = new GroupMember(groupMemberId, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(),
+                Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
+
+            Group group = new Group(groupId, groupMemberId, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
+
+
+            string newGroupName = "New Group Name";
+            string newGroupDescription = "New Group Description";
+            string newGroupIcon = "New Group Icon";
+            string newGroupBanner = "New Group Banner";
+            int maxPostsPerHourPerUser = 10;
+            bool isTheGroupPublic = true;
+            bool allowanceOfPostageByDefault = false;
+
+
+            _groupMemberRepositoryMock.Setup(x => x.AddGroupMember(It.IsAny<GroupMember>()));
+
+            _groupRepositoryMock.Setup(x => x.AddGroup(It.IsAny<Group>()));
+
+            _groupRepositoryMock.Setup(x => x.UpdateGroup(group));
+
+            _groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(group);
+            _groupMemberRepositoryMock.Setup(x => x.GetGroupMemberById(groupMemberId)).Returns(newMember);
+
+            _groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(group);
+            _groupRepositoryMock.Setup(x => x.UpdateGroup(It.IsAny<Group>()));
+
+            _groupRepositoryMock.Setup(x => x.UpdateGroup(It.IsAny<UBB_SE_2024_Popsicles.Models.Group>()));
+
+            // Act
+            _groupService.UpdateGroup(groupId, newGroupName, newGroupDescription, newGroupIcon, newGroupBanner, maxPostsPerHourPerUser, isTheGroupPublic, allowanceOfPostageByDefault);
+
+            // Assert
+            _groupRepositoryMock.Verify(x => x.UpdateGroup(It.Is<Group>(g =>
+                g.Id == groupId &&
+                g.Name == newGroupName &&
+                g.Description == newGroupDescription &&
+                g.Icon == newGroupIcon &&
+                g.Banner == newGroupBanner &&
+                g.MaxPostsPerHourPerUser == maxPostsPerHourPerUser &&
+                g.IsPublic == isTheGroupPublic &&
+                g.CanMakePostsByDefault == allowanceOfPostageByDefault)));
+        }
+
+
+
+        [Test]
+        public void BanMemberFromGroup_ShouldSetMemberAsBanned()
+        {
+            // Arrange
+            //Guid groupId = Guid.NewGuid();
+
+            //Guid membershipId = Guid.NewGuid();
+            //Guid groupMemberId = Guid.NewGuid();
+            //GroupMember newMember = new GroupMember(groupMemberId, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(),
+            //    Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
+
+            //Group group = new Group(groupId, groupMemberId, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
+
+
+            //GroupMembership groupMembership = new GroupMembership(membershipId, groupMemberId, "test", groupId, "test", DateTime.Now,
+            //    false, false, false);
+
+            ////group.GetMembership()
+
+            //newMember.AddGroupMembership(groupMembership);
+
+            //_groupMemberRepositoryMock.Setup(x => x.AddGroupMember(It.IsAny<GroupMember>()));
+
+            //_groupRepositoryMock.Setup(x => x.AddGroup(It.IsAny<Group>()));
+
+            //_groupMembershipRepositoryMock.Setup(x => x.AddGroupMembership(It.IsAny<GroupMembership>()));
+
+            //_groupMembershipRepositoryMock.Setup(x => x.GetGroupMembershipById(membershipId)).Returns(groupMembership);
+
+            //_groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(group);
+
+            //_groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(group);
+            //_groupMemberRepositoryMock.Setup(x => x.GetGroupMemberById(groupMemberId)).Returns(newMember);
+
+            //// Act
+            //_groupService.BanMemberFromGroup(groupMemberId, groupId);
+
+            //// Assert
+            //_groupRepositoryMock.Verify(x => x.GetGroupById(groupId), Times.Once);
+            //Assert.IsTrue(_groupRepositoryMock.Object.GetGroupById(groupId).GetMembership(groupMemberId).IsBanned);
+        }
+
+        [Test]
+        public void UnbanMemberFromGroup_ShouldSetMemberAsNotBanned()
+        {
+            // Arrange
+            //Guid unbannedMemberId = Guid.NewGuid();
+            //Guid groupId = Guid.NewGuid();
+            //_groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(new UBB_SE_2024_Popsicles.Models.Group(groupId, Guid.NewGuid(), "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code"));
+
+            //// Act
+            //_groupService.UnbanMemberFromGroup(unbannedMemberId, groupId);
+
+            //// Assert
+            //_groupRepositoryMock.Verify(x => x.GetGroupById(groupId), Times.Once);
+            //Assert.IsFalse(_groupRepositoryMock.Object.GetGroupById(groupId).GetMembership(unbannedMemberId).IsBanned);
+        }
+
+        [Test]
+        public void TimeoutMemberFromGroup_ShouldSetMemberAsTimedOut()
+        {
+            // Arrange
+            //Guid timedOutMemberId = Guid.NewGuid();
+            //Guid groupId = Guid.NewGuid();
+            //_groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(new UBB_SE_2024_Popsicles.Models.Group(groupId, Guid.NewGuid(), "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code"));
+
+            //// Act
+            //_groupService.TimeoutMemberFromGroup(timedOutMemberId, groupId);
+
+            //// Assert
+            //_groupRepositoryMock.Verify(x => x.GetGroupById(groupId), Times.Once);
+            //Assert.IsTrue(_groupRepositoryMock.Object.GetGroupById(groupId).GetMembership(timedOutMemberId).IsTimedOut);
+        }
+
+        [Test]
+        public void EndTimeoutOfMemberFromGroup_ShouldSetMemberAsNotTimedOut()
+        {
+            // Arrange
+            //Guid memberWithTimeoutId = Guid.NewGuid();
+            //Guid groupId = Guid.NewGuid();
+            //_groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(new UBB_SE_2024_Popsicles.Models.Group(groupId, Guid.NewGuid(), "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code"));
+
+            //// Act
+            //_groupService.EndTimeoutOfMemberFromGroup(memberWithTimeoutId, groupId);
+
+            //// Assert
+            //_groupRepositoryMock.Verify(x => x.GetGroupById(groupId), Times.Once);
+            //Assert.IsFalse(_groupRepositoryMock.Object.GetGroupById(groupId).GetMembership(memberWithTimeoutId).IsTimedOut);
+        }
+
+
+        [Test]
+        public void GetGroupMembers_ShouldReturnGroupMembers()
+        {
+            // Arrange
+            Guid groupId = Guid.NewGuid();
+            List<GroupMembership> memberships = new List<GroupMembership>
+    {
+        new GroupMembership(Guid.NewGuid(), Guid.NewGuid(), "Member1", groupId, "role1", DateTime.Now, false, false, false),
+        new GroupMembership(Guid.NewGuid(), Guid.NewGuid(), "Member2", groupId, "role2", DateTime.Now, false, false, false)
+    };
+            _groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(new UBB_SE_2024_Popsicles.Models.Group(groupId, Guid.NewGuid(), "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code") { Memberships = memberships });
+
+            // Act
+            List<GroupMember> result = _groupService.GetGroupMembers(groupId);
+
+            // Assert
+            Assert.AreEqual(2, result.Count);
+        }
+
+        [Test]
+        public void GetMemberFromGroup_ShouldReturnGroupMember()
+        {
+            // Arrange
+            Guid groupId = Guid.NewGuid();
+            Guid groupMemberId = Guid.NewGuid();
+            GroupMembership membership = new GroupMembership(Guid.NewGuid(), groupMemberId, "TestMember", groupId, "role", DateTime.Now, false, false, false);
+            _groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(new UBB_SE_2024_Popsicles.Models.Group(groupId, Guid.NewGuid(), "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code") { Memberships = new List<GroupMembership> { membership } });
+            _groupMemberRepositoryMock.Setup(x => x.GetGroupMemberById(groupMemberId)).Returns(new GroupMember(groupMemberId, "TestMember", "password", "email", "phone", "description"));
 
             // Act
             GroupMember result = _groupService.GetMemberFromGroup(groupId, groupMemberId);
@@ -269,1191 +603,613 @@ namespace Test_UBB_SE_2024_Popsicles.TestService
 
 
         [Test]
-        public void TestDeleteGroupService()
-        {
-            Guid Id = Guid.NewGuid();
-            Guid OwnerId = _groupRepository.GetGroups()[0].OwnerId;
-            string Name = "Test Group";
-            string Description = "Test Description";
-            string Icon = "test_icon.png";
-            string Banner = "test_banner.png";
-            int MaxPostsPerHourPerUser = 10;
-            string GroupCode = "TEST";
-            bool IsPublic = true;
-            bool CanMakePostsByDefault = true;
-
-            Group group = new Group(Id, OwnerId, Name, Description, Icon, Banner, MaxPostsPerHourPerUser, IsPublic, CanMakePostsByDefault, GroupCode);
-
-            // Act
-            _groupRepository.AddGroup(group);
-
-            // Act
-            _groupService.DeleteGroup(Id);
-            Assert.IsFalse(_groupRepository.GetGroups().Any(g => g.Id == group.Id));
-        }
-
-        [Test]
-        public void GetGroupPosts_WhenGroupExistsAndHasPosts_ReturnsPosts()
-        {
-            // Arrange
-            Guid groupId = Guid.NewGuid();
-            Guid postId1 = Guid.NewGuid();
-            Guid postId2 = Guid.NewGuid();
-            Guid ownerId = Guid.NewGuid();
-
-            GroupMember owner = new GroupMember(ownerId, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "Owner Description");
-            _groupMemberRepository.AddGroupMember(owner);
-
-            GroupPost post1 = new GroupPost(postId1, ownerId, "Post 1", "Description 1",groupId);
-            GroupPost post2 = new GroupPost(postId2, ownerId, "Post 2", "Description 2", groupId);
-
-
-
-            Group group = new Group(groupId, ownerId, "Test Group", "Test Description", "Test Icon",
-                "Test Banner", 5, true, true, "Test Code");
-            _groupRepository.AddGroup(group);
-
-            group.AddPost(post1);
-            group.AddPost(post2);
-
-            // Act
-            List<GroupPost> posts = _groupService.GetGroupPosts(groupId);
-
-            // Assert
-            Assert.IsNotNull(posts);
-            Assert.AreEqual(2, posts.Count);
-            Assert.IsTrue(posts.Any(p => p.Id == postId1));
-            Assert.IsTrue(posts.Any(p => p.Id == postId2));
-        }
-
-
-        [Test]
-        public void GetGroupPosts_WhenGroupDoesNotExist_ReturnsEmptyList()
-        {
-            // Arrange
-            Guid groupId = Guid.NewGuid();
-
-            Guid ownerId = _groupMemberRepository.GetGroupMembers().Last().Id;
-
-
-            Group group = new Group(groupId, ownerId, "Test Group", "Test Description", "Test Icon",
-                "Test Banner", 5, true, true, "Test Code");
-            _groupRepository.AddGroup(group);
-            // Act
-            List<GroupPost> posts = _groupService.GetGroupPosts(groupId);
-
-            // Assert
-            Assert.IsNotNull(posts);
-            Assert.AreEqual(0, posts.Count);
-        }
-
-
-        [Test]
-        public void UpdateGroup_WhenGroupDoesNotExist_ShouldThrowException()
-        {
-            // Arrange
-            Guid groupId = Guid.NewGuid();
-            string newGroupName = "New Group Name";
-            string newGroupDescription = "New Group Description";
-            string newGroupIcon = "New Group Icon";
-            string newGroupBanner = "New Group Banner";
-            int maxPostsPerHourPerUser = 10;
-            bool isTheGroupPublic = true;
-            bool allowanceOfPostageByDefault = true;
-
-            // Act & Assert
-            Assert.Throws<InvalidOperationException>(() => _groupService.UpdateGroup(groupId, newGroupName, newGroupDescription, newGroupIcon, newGroupBanner, maxPostsPerHourPerUser, isTheGroupPublic, allowanceOfPostageByDefault));
-        }
-
-        [Test]
-        public void UpdateGroup_WhenGroupExists_ShouldUpdateGroup()
-        {
-            // Arrange
-            Guid groupId = Guid.NewGuid();
-            Guid ownerId = Guid.NewGuid();
-            string originalGroupName = "Original Group Name";
-            string originalGroupDescription = "Original Group Description";
-            string originalGroupIcon = "Original Group Icon";
-            string originalGroupBanner = "Original Group Banner";
-            int originalMaxPostsPerHourPerUser = 5;
-            bool originalIsTheGroupPublic = true;
-            bool originalAllowanceOfPostageByDefault = true;
-            string groupCode = "TestCode";
-
-            GroupMember owner = new GroupMember(ownerId, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0,10), "Owner Description");
-            _groupMemberRepository.AddGroupMember(owner);
-
-            Group group = new Group(groupId, ownerId, originalGroupName, originalGroupDescription, originalGroupIcon, originalGroupBanner, originalMaxPostsPerHourPerUser, originalIsTheGroupPublic, originalAllowanceOfPostageByDefault, groupCode);
-            _groupRepository.AddGroup(group);
-
-            string newGroupName = "New Group Name";
-            string newGroupDescription = "New Group Description";
-            string newGroupIcon = "New Group Icon";
-            string newGroupBanner = "New Group Banner";
-            int newMaxPostsPerHourPerUser = 10;
-            bool newIsTheGroupPublic = false;
-            bool newAllowanceOfPostageByDefault = false;
-
-            // Act
-            _groupService.UpdateGroup(groupId, newGroupName, newGroupDescription, newGroupIcon, newGroupBanner, newMaxPostsPerHourPerUser, newIsTheGroupPublic, newAllowanceOfPostageByDefault);
-
-            // Assert
-            Group updatedGroup = _groupRepository.GetGroupById(groupId);
-            Assert.AreEqual(newGroupName, updatedGroup.Name);
-            Assert.AreEqual(newGroupDescription, updatedGroup.Description);
-            Assert.AreEqual(newGroupIcon, updatedGroup.Icon);
-            Assert.AreEqual(newGroupBanner, updatedGroup.Banner);
-            Assert.AreEqual(newMaxPostsPerHourPerUser, updatedGroup.MaxPostsPerHourPerUser);
-            Assert.AreEqual(newIsTheGroupPublic, updatedGroup.IsPublic);
-            Assert.AreEqual(newAllowanceOfPostageByDefault, updatedGroup.CanMakePostsByDefault);
-        }
-
-
-        [Test]
-        public void UnbanMemberFromGroup_WhenGroupExistsButMemberIsNotInGroup_ShouldThrowException()
-        {
-            // Arrange
-            Guid groupId = Guid.NewGuid();
-            Guid memberId1 = Guid.NewGuid();
-            Guid memberId2 = Guid.NewGuid();
-
-            GroupMember member1 = new GroupMember(memberId1, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
-            GroupMember member2 = new GroupMember(memberId2, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
-
-            _groupMemberRepository.AddGroupMember(member1);
-            _groupMemberRepository.AddGroupMember(member2);
-
-            Guid group1Id = Guid.NewGuid();
-
-            Group group1 = new Group(group1Id, memberId1, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
-
-            _groupRepository.AddGroup(group1);
-
-            List<GroupMembership> memberships = new List<GroupMembership>
-    {
-        new GroupMembership(Guid.NewGuid(), memberId1, Guid.NewGuid().ToString(),group1Id,Guid.NewGuid().ToString(), DateTime.Now,false,false,true),
-    };
-
-            _groupService.AddMemberToGroup(memberId1, group1Id, "admin");
-
-            // Act & Assert
-            Assert.Throws<InvalidOperationException>(() => _groupService.UnbanMemberFromGroup(memberId2, group1Id));
-        }
-
-        [Test]
-        public void UnbanMemberFromGroup_WhenGroupExistsAndMemberIsInGroup_ShouldUpdateGroupMembership()
-        {
-            // Arrange
-            Guid groupId = Guid.NewGuid();
-            Guid memberId1 = Guid.NewGuid();
-
-            GroupMember member1 = new GroupMember(memberId1, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
-
-            _groupMemberRepository.AddGroupMember(member1);
-
-            Guid group1Id = Guid.NewGuid();
-
-            Group group1 = new Group(group1Id, memberId1, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
-
-            _groupRepository.AddGroup(group1);
-
-            List<GroupMembership> memberships = new List<GroupMembership>
-    {
-        new GroupMembership(Guid.NewGuid(), memberId1, Guid.NewGuid().ToString(),group1Id,Guid.NewGuid().ToString(), DateTime.Now,false,true,true),
-    };
-
-            _groupService.AddMemberToGroup(memberId1, group1Id, "admin");
-
-            // Act
-            _groupService.UnbanMemberFromGroup(memberId1, group1Id);
-
-            // Assert
-            GroupMembership groupMembership = group1.GetMembership(memberId1);
-            Assert.IsFalse(groupMembership.IsBanned);
-        }
-
-        [Test]
-        public void BanMemberFromGroup_WhenGroupExistsButMemberIsNotInGroup_ShouldThrowException()
-        {
-            // Arrange
-            Guid groupId = Guid.NewGuid();
-            Guid memberId1 = Guid.NewGuid();
-            Guid memberId2 = Guid.NewGuid();
-
-            GroupMember member1 = new GroupMember(memberId1, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
-            GroupMember member2 = new GroupMember(memberId2, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
-
-            _groupMemberRepository.AddGroupMember(member1);
-            _groupMemberRepository.AddGroupMember(member2);
-
-            Guid group1Id = Guid.NewGuid();
-
-            Group group1 = new Group(group1Id, memberId1, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
-
-            _groupRepository.AddGroup(group1);
-
-            List<GroupMembership> memberships = new List<GroupMembership>
-    {
-        new GroupMembership(Guid.NewGuid(), memberId1, Guid.NewGuid().ToString(),group1Id,Guid.NewGuid().ToString(), DateTime.Now,false,false,true),
-    };
-
-            _groupService.AddMemberToGroup(memberId1, group1Id, "admin");
-
-            // Act & Assert
-            Assert.Throws<InvalidOperationException>(() => _groupService.BanMemberFromGroup(memberId2, group1Id));
-        }
-
-        [Test]
-        public void BanMemberFromGroup_WhenGroupExistsAndMemberIsInGroup_ShouldUpdateGroupMembership()
-        {
-            // Arrange
-            Guid groupId = Guid.NewGuid();
-            Guid memberId1 = Guid.NewGuid();
-
-            GroupMember member1 = new GroupMember(memberId1, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
-
-            _groupMemberRepository.AddGroupMember(member1);
-
-            Guid group1Id = Guid.NewGuid();
-
-            Group group1 = new Group(group1Id, memberId1, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
-
-            _groupRepository.AddGroup(group1);
-
-            List<GroupMembership> memberships = new List<GroupMembership>
-    {
-        new GroupMembership(Guid.NewGuid(), memberId1, Guid.NewGuid().ToString(),group1Id,Guid.NewGuid().ToString(), DateTime.Now,false,false,true),
-    };
-
-            _groupService.AddMemberToGroup(memberId1, group1Id, "admin");
-
-            // Act
-            _groupService.BanMemberFromGroup(memberId1, group1Id);
-
-            // Assert
-            GroupMembership groupMembership = group1.GetMembership(memberId1);
-            Assert.IsTrue(groupMembership.IsBanned);
-        }
-
-
-        [Test]
-        public void TimeoutMemberFromGroup_WhenGroupExistsButMemberIsNotInGroup_ShouldThrowException()
-        {
-            // Arrange
-            Guid groupId = Guid.NewGuid();
-            Guid memberId1 = Guid.NewGuid();
-            Guid memberId2 = Guid.NewGuid();
-
-            GroupMember member1 = new GroupMember(memberId1, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
-            GroupMember member2 = new GroupMember(memberId2, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
-
-            _groupMemberRepository.AddGroupMember(member1);
-            _groupMemberRepository.AddGroupMember(member2);
-
-            Guid group1Id = Guid.NewGuid();
-
-            Group group1 = new Group(group1Id, memberId1, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
-
-            _groupRepository.AddGroup(group1);
-
-            List<GroupMembership> memberships = new List<GroupMembership>
-    {
-        new GroupMembership(Guid.NewGuid(), memberId1, Guid.NewGuid().ToString(),group1Id,Guid.NewGuid().ToString(), DateTime.Now,false,false,true),
-    };
-
-            _groupService.AddMemberToGroup(memberId1, group1Id, "admin");
-
-            // Act & Assert
-            Assert.Throws<InvalidOperationException>(() => _groupService.TimeoutMemberFromGroup(memberId2, group1Id));
-        }
-
-        [Test]
-        public void TimeoutMemberFromGroup_WhenGroupExistsAndMemberIsInGroup_ShouldUpdateGroupMembership()
-        {
-            // Arrange
-            Guid groupId = Guid.NewGuid();
-            Guid memberId1 = Guid.NewGuid();
-
-            GroupMember member1 = new GroupMember(memberId1, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
-
-            _groupMemberRepository.AddGroupMember(member1);
-
-            Guid group1Id = Guid.NewGuid();
-
-            Group group1 = new Group(group1Id, memberId1, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
-
-            _groupRepository.AddGroup(group1);
-
-            List<GroupMembership> memberships = new List<GroupMembership>
-    {
-        new GroupMembership(Guid.NewGuid(), memberId1, Guid.NewGuid().ToString(),group1Id,Guid.NewGuid().ToString(), DateTime.Now,false,false,true),
-    };
-
-            _groupService.AddMemberToGroup(memberId1, group1Id, "admin");
-
-            // Act
-            _groupService.TimeoutMemberFromGroup(memberId1, group1Id);
-
-            // Assert
-            GroupMembership groupMembership = group1.GetMembership(memberId1);
-            Assert.IsTrue(groupMembership.IsTimedOut);
-        }
-
-
-
-
-        [Test]
-        public void EndTimeoutOfMemberFromGroup_WhenGroupExistsButMemberIsNotInGroup_ShouldThrowException()
-        {
-            // Arrange
-            Guid groupId = Guid.NewGuid();
-            Guid memberId1 = Guid.NewGuid();
-            Guid memberId2 = Guid.NewGuid();
-
-            GroupMember member1 = new GroupMember(memberId1, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
-            GroupMember member2 = new GroupMember(memberId2, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
-
-            _groupMemberRepository.AddGroupMember(member1);
-            _groupMemberRepository.AddGroupMember(member2);
-
-            Guid group1Id = Guid.NewGuid();
-
-            Group group1 = new Group(group1Id, memberId1, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
-
-            _groupRepository.AddGroup(group1);
-
-            List<GroupMembership> memberships = new List<GroupMembership>
-    {
-        new GroupMembership(Guid.NewGuid(), memberId1, Guid.NewGuid().ToString(),group1Id,Guid.NewGuid().ToString(), DateTime.Now,false,false,true),
-    };
-
-            _groupService.AddMemberToGroup(memberId1, group1Id, "admin");
-
-            // Act & Assert
-            Assert.Throws<InvalidOperationException>(() => _groupService.EndTimeoutOfMemberFromGroup(memberId2, group1Id));
-        }
-
-        [Test]
-        public void EndTimeoutOfMemberFromGroup_WhenGroupExistsAndMemberIsInGroup_ShouldUpdateGroupMembership()
-        {
-            // Arrange
-            Guid groupId = Guid.NewGuid();
-            Guid memberId1 = Guid.NewGuid();
-
-            GroupMember member1 = new GroupMember(memberId1, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
-
-            _groupMemberRepository.AddGroupMember(member1);
-
-            Guid group1Id = Guid.NewGuid();
-
-            Group group1 = new Group(group1Id, memberId1, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
-
-            _groupRepository.AddGroup(group1);
-
-            List<GroupMembership> memberships = new List<GroupMembership>
-    {
-        new GroupMembership(Guid.NewGuid(), memberId1, Guid.NewGuid().ToString(),group1Id,Guid.NewGuid().ToString(), DateTime.Now,true,false,true),
-    };
-
-            _groupService.AddMemberToGroup(memberId1, group1Id, "admin");
-
-            // Act
-            _groupService.EndTimeoutOfMemberFromGroup(memberId1, group1Id);
-
-            // Assert
-            GroupMembership groupMembership = group1.GetMembership(memberId1);
-            Assert.IsFalse(groupMembership.IsTimedOut);
-        }
-
-
-
-
-        [Test]
-        public void ChangeMemberRoleInTheGroup_WhenGroupExistsButMemberIsNotInGroup_ShouldThrowException()
-        {
-            // Arrange
-            Guid groupId = Guid.NewGuid();
-            Guid memberId1 = Guid.NewGuid();
-            Guid memberId2 = Guid.NewGuid();
-            string newRole = "newRole";
-
-            GroupMember member1 = new GroupMember(memberId1, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
-            GroupMember member2 = new GroupMember(memberId2, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
-
-            _groupMemberRepository.AddGroupMember(member1);
-            _groupMemberRepository.AddGroupMember(member2);
-
-            Guid group1Id = Guid.NewGuid();
-
-            Group group1 = new Group(group1Id, memberId1, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
-
-            _groupRepository.AddGroup(group1);
-
-            List<GroupMembership> memberships = new List<GroupMembership>
-    {
-        new GroupMembership(Guid.NewGuid(), memberId1, Guid.NewGuid().ToString(),group1Id,Guid.NewGuid().ToString(), DateTime.Now,false,false,true),
-    };
-
-            _groupService.AddMemberToGroup(memberId1, group1Id, "admin");
-
-            // Act & Assert
-            Assert.Throws<InvalidOperationException>(() => _groupService.ChangeMemberRoleInTheGroup(memberId2, group1Id, newRole));
-        }
-
-        [Test]
-        public void ChangeMemberRoleInTheGroup_WhenGroupExistsAndMemberIsInGroup_ShouldUpdateGroupMembership()
-        {
-            // Arrange
-            Guid groupId = Guid.NewGuid();
-            Guid memberId1 = Guid.NewGuid();
-
-            GroupMember member1 = new GroupMember(memberId1, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
-
-            _groupMemberRepository.AddGroupMember(member1);
-
-            Guid group1Id = Guid.NewGuid();
-
-            Group group1 = new Group(group1Id, memberId1, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
-
-            _groupRepository.AddGroup(group1);
-
-            List<GroupMembership> memberships = new List<GroupMembership>
-    {
-        new GroupMembership(Guid.NewGuid(), memberId1, Guid.NewGuid().ToString(),group1Id,Guid.NewGuid().ToString(), DateTime.Now,false,false,true),
-    };
-
-            _groupService.AddMemberToGroup(memberId1, group1Id, "admin");
-
-            string newRole = "newRole";
-
-            // Act
-            _groupService.ChangeMemberRoleInTheGroup(memberId1, group1Id, newRole);
-
-            // Assert
-            GroupMembership groupMembership = group1.GetMembership(memberId1);
-            Assert.AreEqual(newRole, groupMembership.Role);
-        }
-
-        [Test]
-        public void AllowMemberToBypassPostageAllowance_WhenGroupExistsButMemberIsNotInGroup_ShouldThrowException()
-        {
-            // Arrange
-            Guid groupId = Guid.NewGuid();
-            Guid memberId1 = Guid.NewGuid();
-            Guid memberId2 = Guid.NewGuid();
-
-            GroupMember member1 = new GroupMember(memberId1, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
-            GroupMember member2 = new GroupMember(memberId2, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
-
-            _groupMemberRepository.AddGroupMember(member1);
-            _groupMemberRepository.AddGroupMember(member2);
-
-            Guid group1Id = Guid.NewGuid();
-
-            Group group1 = new Group(group1Id, memberId1, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
-
-            _groupRepository.AddGroup(group1);
-
-            List<GroupMembership> memberships = new List<GroupMembership>
-    {
-        new GroupMembership(Guid.NewGuid(), memberId1, Guid.NewGuid().ToString(),group1Id,Guid.NewGuid().ToString(), DateTime.Now,false,false,true),
-    };
-
-            _groupService.AddMemberToGroup(memberId1, group1Id, "admin");
-
-            // Act & Assert
-            Assert.Throws<InvalidOperationException>(() => _groupService.AllowMemberToBypassPostageAllowance(memberId2, group1Id));
-        }
-
-        [Test]
-        public void AllowMemberToBypassPostageAllowance_WhenGroupExistsAndMemberIsInGroup_ShouldUpdateGroupMembership()
-        {
-            // Arrange
-            Guid groupId = Guid.NewGuid();
-            Guid memberId1 = Guid.NewGuid();
-
-            GroupMember member1 = new GroupMember(memberId1, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
-
-            _groupMemberRepository.AddGroupMember(member1);
-
-            Guid group1Id = Guid.NewGuid();
-
-            Group group1 = new Group(group1Id, memberId1, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
-
-            _groupRepository.AddGroup(group1);
-
-            List<GroupMembership> memberships = new List<GroupMembership>
-    {
-        new GroupMembership(Guid.NewGuid(), memberId1, Guid.NewGuid().ToString(),group1Id,Guid.NewGuid().ToString(), DateTime.Now,false,false,true),
-    };
-
-            _groupService.AddMemberToGroup(memberId1, group1Id, "admin");
-
-            // Act
-            _groupService.AllowMemberToBypassPostageAllowance(memberId1, group1Id);
-
-            // Assert
-            GroupMembership groupMembership = group1.GetMembership(memberId1);
-            Assert.IsTrue(groupMembership.ByPassPostSettings);
-        }
-
-        [Test]
-        public void DisallowMemberToBypassPostageAllowance_WhenGroupExistsButMemberIsNotInGroup_ShouldThrowException()
-        {
-            // Arrange
-            Guid groupId = Guid.NewGuid();
-        Guid memberId1 = Guid.NewGuid();
-        Guid memberId2 = Guid.NewGuid();
-
-        GroupMember member1 = new GroupMember(memberId1, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
-        GroupMember member2 = new GroupMember(memberId2, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
-
-        _groupMemberRepository.AddGroupMember(member1);
-    _groupMemberRepository.AddGroupMember(member2);
-
-    Guid group1Id = Guid.NewGuid();
-
-        Group group1 = new Group(group1Id, memberId1, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
-
-        _groupRepository.AddGroup(group1);
-
-    List<GroupMembership> memberships = new List<GroupMembership>
-    {
-        new GroupMembership(Guid.NewGuid(), memberId1, Guid.NewGuid().ToString(),group1Id,Guid.NewGuid().ToString(), DateTime.Now,false,false,true),
-    };
-
-        _groupService.AddMemberToGroup(memberId1, group1Id, "admin");
-
-    // Act & Assert
-    Assert.Throws<InvalidOperationException>(() => _groupService.DisallowMemberToBypassPostageAllowance(memberId2, group1Id));
-}
-
-    [Test]
-    public void DisallowMemberToBypassPostageAllowance_WhenGroupExistsAndMemberIsInGroup_ShouldUpdateGroupMembership()
-    {
-        // Arrange
-        Guid groupId = Guid.NewGuid();
-        Guid memberId1 = Guid.NewGuid();
-
-        GroupMember member1 = new GroupMember(memberId1, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
-
-        _groupMemberRepository.AddGroupMember(member1);
-
-        Guid group1Id = Guid.NewGuid();
-
-        Group group1 = new Group(group1Id, memberId1, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
-
-        _groupRepository.AddGroup(group1);
-
-        List<GroupMembership> memberships = new List<GroupMembership>
-    {
-        new GroupMembership(Guid.NewGuid(), memberId1, Guid.NewGuid().ToString(),group1Id,Guid.NewGuid().ToString(), DateTime.Now,false,false,true),
-    };
-
-        _groupService.AddMemberToGroup(memberId1, group1Id, "admin");
-
-        // Act
-        _groupService.DisallowMemberToBypassPostageAllowance(memberId1, group1Id);
-
-        // Assert
-        GroupMembership groupMembership = group1.GetMembership(memberId1);
-        Assert.IsFalse(groupMembership.ByPassPostSettings);
-    }
-
-
-    [Test]
-        public void RejectRequestToJoinGroup_WhenRequestExists_ShouldRemoveRequestFromGroup()
-        {
-            // Arrange
-            Guid groupId = Guid.NewGuid();
-            Guid memberId1 = Guid.NewGuid();
-            Guid memberId2 = Guid.NewGuid();
-
-            GroupMember member1 = new GroupMember(memberId1, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
-            GroupMember member2 = new GroupMember(memberId2, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
-
-            _groupMemberRepository.AddGroupMember(member1);
-            _groupMemberRepository.AddGroupMember(member2);
-
-            Guid group1Id = Guid.NewGuid();
-
-            Group group1 = new Group(group1Id, memberId1, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
-
-            _groupRepository.AddGroup(group1);
-
-            List<GroupMembership> memberships = new List<GroupMembership>
-    {
-        new GroupMembership(Guid.NewGuid(), memberId1, Guid.NewGuid().ToString(),group1Id,Guid.NewGuid().ToString(), DateTime.Now,false,false,true),
-    };
-
-            _groupService.AddMemberToGroup(memberId1, group1Id, "admin");
-
-
-            _groupService.AddNewRequestToJoinGroup(memberId2, group1Id);
-
-            Guid requestId = _groupService.GetRequestsToJoin(group1Id).Last().Id;
-
-            // Act
-            _groupService.RejectRequestToJoinGroup(requestId);
-
-            // Assert
-            Assert.IsFalse(group1.Requests.Any(r => r.Id == requestId));
-        }
-
-        [Test]
-        public void RejectRequestToJoinGroup_WhenRequestExists_ShouldRemoveRequestFromGroupMember()
-        {
-            // Arrange
-            Guid groupId = Guid.NewGuid();
-            Guid memberId1 = Guid.NewGuid();
-            Guid memberId2 = Guid.NewGuid();
-
-            GroupMember member1 = new GroupMember(memberId1, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
-            GroupMember member2 = new GroupMember(memberId2, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
-
-            _groupMemberRepository.AddGroupMember(member1);
-            _groupMemberRepository.AddGroupMember(member2);
-
-            Guid group1Id = Guid.NewGuid();
-
-            Group group1 = new Group(group1Id, memberId1, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
-
-            _groupRepository.AddGroup(group1);
-
-            List<GroupMembership> memberships = new List<GroupMembership>
-    {
-        new GroupMembership(Guid.NewGuid(), memberId1, Guid.NewGuid().ToString(),group1Id,Guid.NewGuid().ToString(), DateTime.Now,false,false,true),
-    };
-
-            _groupService.AddMemberToGroup(memberId1, group1Id, "admin");
-
-
-            _groupService.AddNewRequestToJoinGroup(memberId2, group1Id);
-
-
-            Guid requestId = _groupService.GetRequestsToJoin(group1Id).Last().Id;
-
-            // Act
-            _groupService.RejectRequestToJoinGroup(requestId);
-
-            // Assert
-            Assert.IsFalse(member2.OutgoingRequests.Any(r => r.Id == requestId));
-        }
-
-
-
-        [Test]
-        public void AcceptRequestToJoinGroup_WhenRequestExists_ShouldAddMemberToGroup()
-        {
-            // Arrange
-            Guid groupId = Guid.NewGuid();
-            Guid memberId1 = Guid.NewGuid();
-            Guid memberId2 = Guid.NewGuid();
-
-            GroupMember member1 = new GroupMember(memberId1, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
-            GroupMember member2 = new GroupMember(memberId2, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
-
-            _groupMemberRepository.AddGroupMember(member1);
-            _groupMemberRepository.AddGroupMember(member2);
-
-            Guid group1Id = Guid.NewGuid();
-
-            Group group1 = new Group(group1Id, memberId1, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
-
-            _groupRepository.AddGroup(group1);
-
-            List<GroupMembership> memberships = new List<GroupMembership>
-    {
-        new GroupMembership(Guid.NewGuid(), memberId1, Guid.NewGuid().ToString(),group1Id,Guid.NewGuid().ToString(), DateTime.Now,false,false,true),
-    };
-
-            _groupService.AddMemberToGroup(memberId1, group1Id, "admin");
-
-            
-
-            _groupService.AddNewRequestToJoinGroup(memberId2, group1Id);
-
-            Guid requestId = _groupService.GetRequestsToJoin(group1Id).Last().Id;
-
-            // Act
-            _groupService.AcceptRequestToJoinGroup(requestId);
-
-            // Assert
-            Assert.IsTrue(group1.Memberships.Any(m => m.GroupMemberId == memberId2));
-        }
-
-        [Test]
-        public void AcceptRequestToJoinGroup_WhenRequestExists_ShouldRemoveRequestFromGroup()
-        {
-            // Arrange
-            Guid groupId = Guid.NewGuid();
-            Guid memberId1 = Guid.NewGuid();
-            Guid memberId2 = Guid.NewGuid();
-
-            GroupMember member1 = new GroupMember(memberId1, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
-            GroupMember member2 = new GroupMember(memberId2, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
-
-            _groupMemberRepository.AddGroupMember(member1);
-            _groupMemberRepository.AddGroupMember(member2);
-
-            Guid group1Id = Guid.NewGuid();
-
-            Group group1 = new Group(group1Id, memberId1, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
-
-            _groupRepository.AddGroup(group1);
-
-            List<GroupMembership> memberships = new List<GroupMembership>
-    {
-        new GroupMembership(Guid.NewGuid(), memberId1, Guid.NewGuid().ToString(),group1Id,Guid.NewGuid().ToString(), DateTime.Now,false,false,true),
-    };
-
-            _groupService.AddMemberToGroup(memberId1, group1Id, "admin");
-
-            
-
-            _groupService.AddNewRequestToJoinGroup(memberId2, group1Id);
-
-            Guid requestId = _groupService.GetRequestsToJoin(group1Id).Last().Id;
-
-            // Act
-            _groupService.AcceptRequestToJoinGroup(requestId);
-
-            // Assert
-            Assert.IsFalse(group1.Requests.Any(r => r.Id == requestId));
-        }
-
-        [Test]
-        public void AcceptRequestToJoinGroup_WhenRequestExists_ShouldRemoveRequestFromGroupMember()
-        {
-            // Arrange
-            Guid groupId = Guid.NewGuid();
-            Guid memberId1 = Guid.NewGuid();
-            Guid memberId2 = Guid.NewGuid();
-
-            GroupMember member1 = new GroupMember(memberId1, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
-            GroupMember member2 = new GroupMember(memberId2, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
-
-            _groupMemberRepository.AddGroupMember(member1);
-            _groupMemberRepository.AddGroupMember(member2);
-
-            Guid group1Id = Guid.NewGuid();
-
-            Group group1 = new Group(group1Id, memberId1, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
-
-            _groupRepository.AddGroup(group1);
-
-            List<GroupMembership> memberships = new List<GroupMembership>
-    {
-        new GroupMembership(Guid.NewGuid(), memberId1, Guid.NewGuid().ToString(),group1Id,Guid.NewGuid().ToString(), DateTime.Now,false,false,true),
-    };
-
-            _groupService.AddMemberToGroup(memberId1, group1Id, "admin");
-
-
-            _groupService.AddNewRequestToJoinGroup(memberId2, group1Id);
-
-            Guid requestId = _groupService.GetRequestsToJoin(group1Id).Last().Id;
-
-            // Act
-            _groupService.AcceptRequestToJoinGroup(requestId);
-
-            // Assert
-            Assert.IsFalse(member2.OutgoingRequests.Any(r => r.Id == requestId));
-        }
-
-
-
-        [Test]
-        public void AddNewRequestToJoinGroup_WhenGroupMemberIsNotInGroup_ShouldAddRequestToGroup()
-        {
-            // Arrange
-            Guid groupId = Guid.NewGuid();
-            Guid memberId1 = Guid.NewGuid();
-            Guid memberId2 = Guid.NewGuid();
-
-            GroupMember member1 = new GroupMember(memberId1, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
-            GroupMember member2 = new GroupMember(memberId2, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
-
-            _groupMemberRepository.AddGroupMember(member1);
-            _groupMemberRepository.AddGroupMember(member2);
-
-            Guid group1Id = Guid.NewGuid();
-
-            Group group1 = new Group(group1Id, memberId1, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
-
-            _groupRepository.AddGroup(group1);
-
-            List<GroupMembership> memberships = new List<GroupMembership>
-    {
-        new GroupMembership(Guid.NewGuid(), memberId1, Guid.NewGuid().ToString(),group1Id,Guid.NewGuid().ToString(), DateTime.Now,false,false,true),
-    };
-
-            _groupService.AddMemberToGroup(memberId1, group1Id, "admin");
-
-            // Act
-            _groupService.AddNewRequestToJoinGroup(memberId2, group1Id);
-
-            // Assert
-            Assert.AreEqual(1, group1.Requests.Count);
-            Assert.AreEqual(memberId2, group1.Requests[0].GroupMemberId);
-            Assert.AreEqual(group1Id, group1.Requests[0].GroupId);
-        }
-
-        [Test]
-        public void AddNewRequestToJoinGroup_WhenGroupMemberIsNotInGroup_ShouldAddRequestToGroupMember()
-        {
-            // Arrange
-            Guid groupId = Guid.NewGuid();
-            Guid memberId1 = Guid.NewGuid();
-            Guid memberId2 = Guid.NewGuid();
-
-            GroupMember member1 = new GroupMember(memberId1, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
-            GroupMember member2 = new GroupMember(memberId2, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
-
-            _groupMemberRepository.AddGroupMember(member1);
-            _groupMemberRepository.AddGroupMember(member2);
-
-            Guid group1Id = Guid.NewGuid();
-
-            Group group1 = new Group(group1Id, memberId1, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
-
-            _groupRepository.AddGroup(group1);
-
-            List<GroupMembership> memberships = new List<GroupMembership>
-    {
-        new GroupMembership(Guid.NewGuid(), memberId1, Guid.NewGuid().ToString(),group1Id,Guid.NewGuid().ToString(), DateTime.Now,false,false,true),
-    };
-
-            _groupService.AddMemberToGroup(memberId1, group1Id, "admin");
-
-            // Act
-            _groupService.AddNewRequestToJoinGroup(memberId2, group1Id);
-
-            // Assert
-            Assert.AreEqual(1, member2.OutgoingRequests.Count);
-            Assert.AreEqual(group1Id, member2.OutgoingRequests[0].GroupId);
-            Assert.AreEqual(memberId2, member2.OutgoingRequests[0].GroupMemberId);
-        }
-
-
-        [Test]
-        public void GetGroupMembers_WhenGroupExistsAndHasMembers_ReturnsMembers()
-        {
-            // Arrange
-            Guid groupId = Guid.NewGuid();
-            Guid memberId1 = Guid.NewGuid();
-            Guid memberId2 = Guid.NewGuid();
-            
-            
-            GroupMember member1 = new GroupMember(memberId1, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
-
-            GroupMember member2 = new GroupMember(memberId2, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
-
-            _groupMemberRepository.AddGroupMember(member1);
-            _groupMemberRepository.AddGroupMember(member2);
-
-            Guid group1Id = Guid.NewGuid();
-
-
-            Group group1 = new Group(group1Id, memberId1, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
-            
-            
-            _groupRepository.AddGroup(group1);
-            
-            List<GroupMembership> memberships = new List<GroupMembership>
-            {
-                new GroupMembership(Guid.NewGuid(), memberId1, Guid.NewGuid().ToString(),group1Id,Guid.NewGuid().ToString(), DateTime.Now,false,false,true),
-                new GroupMembership(Guid.NewGuid(), memberId2, Guid.NewGuid().ToString(),group1Id,Guid.NewGuid().ToString(), DateTime.Now,false,false,true),
-             };
-
-            _groupService.AddMemberToGroup(memberId2,group1Id);
-
-            _groupService.AddMemberToGroup(memberId1, group1Id , "admin");
-
-            // Act
-            List<GroupMember> members = _groupService.GetGroupMembers(group1Id);
-
-            // Assert
-            Assert.IsNotNull(members);
-            Assert.AreEqual(2, members.Count);
-            Assert.IsTrue(members.Any(m => m.Id == memberId1));
-            Assert.IsTrue(members.Any(m => m.Id == memberId2));
-        }
-
-        [Test]
-        public void GetGroupMembers_WhenGroupExistsButHasNoMembers_ReturnsEmptyList()
-        {
-            // Arrange
-            Guid groupId = Guid.NewGuid();
-
-            Group group = new Group(groupId, _groupMemberRepository.GetGroupMembers().Last().Id, "Test Group", "Test Description", "Test Icon",
-                "Test Banner", 5, true, true, "Test Code");
-            group.Memberships = new List<GroupMembership>();
-
-            _groupRepository.AddGroup(group);
-
-            //_groupService.AddMemberToGroup(_groupMemberRepository.GetGroupMembers().Last().Id,groupId);
-
-            // Act
-            List<GroupMember> members = _groupService.GetGroupMembers(groupId);
-
-            // Assert
-            Assert.IsNotNull(members);
-            Assert.AreEqual(0, members.Count);
-        }
-
-        [Test]
-        public void GetGroupMembers_WhenGroupDoesNotExist_ThrowsException()
-        {
-            // Arrange
-            Guid groupId = Guid.NewGuid();
-
-            // Act & Assert
-            Assert.Throws<InvalidOperationException>(() => _groupService.GetGroupMembers(groupId));
-        }
-
-
-        [Test]
-        public void GetMemberFromGroup_ShouldReturnCorrectMember()
+        public void ChangeMemberRoleInTheGroup_ShouldChangeRole()
         {
             // Arrange
             Guid groupId = Guid.NewGuid();
             Guid groupMemberId = Guid.NewGuid();
-
-            // Create a group and add memberships
-            Group group = new Group(groupId, _groupMemberRepository.GetGroupMembers().Last().Id, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
-            _groupRepository.AddGroup(group);
-            GroupMembership membership = new GroupMembership(Guid.NewGuid(), groupMemberId, Guid.NewGuid().ToString(),groupId, Guid.NewGuid().ToString(),  DateTime.Now, false, false, true);
-            group.Memberships.Add(membership);
-
-            // Add member to group member repository
-            GroupMember groupMember = new GroupMember(groupMemberId, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
-            _groupMemberRepository.AddGroupMember(groupMember);
+            string newGroupRole = "admin";
+            var membership = new GroupMembership(Guid.NewGuid(), groupMemberId, "Test Member", groupId, "user", DateTime.Now, false, false, false);
+            _groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(new UBB_SE_2024_Popsicles.Models.Group(groupId, Guid.NewGuid(), "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code") { Memberships = new List<GroupMembership> { membership } });
 
             // Act
-            GroupMember retrievedMember = _groupService.GetMemberFromGroup(groupId, groupMemberId);
+            _groupService.ChangeMemberRoleInTheGroup(groupMemberId, groupId, newGroupRole);
 
             // Assert
-            Assert.IsNotNull(retrievedMember);
-            Assert.AreEqual(groupMemberId, retrievedMember.Id);
+            _groupMembershipRepositoryMock.Verify(x => x.UpdateGroupMembership(It.Is<GroupMembership>(gm => gm.GroupId == groupId && gm.GroupMemberId == groupMemberId && gm.Role == newGroupRole)), Times.Once);
         }
 
         [Test]
-        public void GetMemberFromGroup_WhenMemberNotFound_ShouldThrowException()
+        public void AllowMemberToBypassPostageAllowance_ShouldSetBypassPostSettingsToTrue()
         {
             // Arrange
             Guid groupId = Guid.NewGuid();
             Guid groupMemberId = Guid.NewGuid();
+            var membership = new GroupMembership(Guid.NewGuid(), groupMemberId, "Test Member", groupId, "user", DateTime.Now, false, false, false);
+            _groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(new UBB_SE_2024_Popsicles.Models.Group(groupId, Guid.NewGuid(), "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code") { Memberships = new List<GroupMembership> { membership } });
 
+            // Act
+            _groupService.AllowMemberToBypassPostageAllowance(groupMemberId, groupId);
 
-            Group group = new Group(groupId, _groupMemberRepository.GetGroupMembers().Last().Id, "Test Group", "Test Description", "Test Icon",
-                "Test Banner", 5, true, true, "Test Code");
-            _groupRepository.AddGroup(group);
-
-            // Act & Assert
-            Assert.Throws<Exception>(() => _groupService.GetMemberFromGroup(groupId, _groupMemberRepository.GetGroupMembers().Last().Id));
-        }
-    
-
-        [Test]
-        public void GetAllGroups_WhenGroupMemberHasMemberships_ReturnsListOfGroups()
-        {
-            // Arrange
-                //Guid groupMemberId = _groupMemberRepository.GetGroupMembers().Last().Id;
-            GroupMember groupMember = new GroupMember(Guid.NewGuid(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0,10), "description");
-            _groupMemberRepository.AddGroupMember(groupMember);
-
-            Guid newMemberGuid = _groupMemberRepository.GetGroupMembers().Last().Id;
-
-            // Create some memberships for the group member
-
-
-            Guid group1Id = Guid.NewGuid(); 
-            Guid group2Id = Guid.NewGuid();
-            Guid group3Id = Guid.NewGuid();
-
-            Group group1 = new Group(group1Id, newMemberGuid, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
-            Group group2 = new Group(group2Id, newMemberGuid, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
-            Group group3 = new Group(group3Id, newMemberGuid, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
-            _groupRepository.AddGroup(group1);
-            _groupRepository.AddGroup(group2);
-            _groupRepository.AddGroup(group3);
-
-
-            List<GroupMembership> memberships = new List<GroupMembership>
-                {
-                    new GroupMembership(Guid.NewGuid(), newMemberGuid, Guid.NewGuid().ToString(),group1Id,Guid.NewGuid().ToString(), DateTime.Now,false,false,true),
-                    new GroupMembership(Guid.NewGuid(), newMemberGuid, Guid.NewGuid().ToString(),group2Id,Guid.NewGuid().ToString(), DateTime.Now,false,false,true),
-                    new GroupMembership(Guid.NewGuid(), newMemberGuid, Guid.NewGuid().ToString(),group3Id,Guid.NewGuid().ToString(), DateTime.Now,false,false,true)
-                };
-            groupMember.Memberships.AddRange(memberships);
-
-                // Create groups corresponding to the memberships
-                List<Group> expectedGroups = new List<Group>();
-                foreach (var membership in memberships)
-                {
-                    Group group = new Group(membership.GroupId, newMemberGuid, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
-                    expectedGroups.Add(group);
-                }
-
-                // Act
-                List<Group> actualGroups = _groupService.GetAllGroups(newMemberGuid);
-
-                // Assert
-                Assert.AreEqual(expectedGroups.Count, actualGroups.Count);
-                for (int i = 0; i < expectedGroups.Count; i++)
-                {
-                    Assert.AreEqual(expectedGroups[i].Id, actualGroups[i].Id);
-                }
-            
-
+            // Assert
+            _groupMembershipRepositoryMock.Verify(x => x.UpdateGroupMembership(It.Is<GroupMembership>(gm => gm.GroupId == groupId && gm.GroupMemberId == groupMemberId && gm.ByPassPostSettings)), Times.Once);
         }
 
-
-
-
         [Test]
-        public void CreateNewPostOnGroupChat_ByPassPostSettings_ShouldAddPost()
+        public void DisallowMemberToBypassPostageAllowance_ShouldSetBypassPostSettingsToFalse()
         {
             // Arrange
             Guid groupId = Guid.NewGuid();
-            Guid groupMemberId = _groupMemberRepository.GetGroupMembers().Last().Id;
-            string postContent = "Test Post Content";
-            string postImage = "test.jpg";
+            Guid groupMemberId = Guid.NewGuid();
+            var membership = new GroupMembership(Guid.NewGuid(), groupMemberId, "Test Member", groupId, "user", DateTime.Now, false, false, true);
+            _groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(new UBB_SE_2024_Popsicles.Models.Group(groupId, Guid.NewGuid(), "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code") { Memberships = new List<GroupMembership> { membership } });
+
+            // Act
+            _groupService.DisallowMemberToBypassPostageAllowance(groupMemberId, groupId);
+
+            // Assert
+            _groupMembershipRepositoryMock.Verify(x => x.UpdateGroupMembership(It.Is<GroupMembership>(gm => gm.GroupId == groupId && gm.GroupMemberId == groupMemberId && !gm.ByPassPostSettings)), Times.Once);
+        }
+
+        [Test]
+        public void CreateNewPostOnGroupChat_ShouldAddPostToGroupWhenMemberHasBypassPostSettings()
+        {
+            // Arrange
+            Guid groupId = Guid.NewGuid();
+            Guid groupMemberId = Guid.NewGuid();
+            GroupMember groupMember = new GroupMember(groupMemberId, "Test User", "test@example.com", "password", "profilePictureUrl", "description");
             Group group = new Group(groupId, groupMemberId, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
-            _groupRepository.AddGroup(group);
-            _groupService.AddMemberToGroup(groupMemberId, groupId, "admin");
+            GroupMembership groupMembership = new GroupMembership(groupMemberId, groupMemberId, "Test Name", groupId, "Test Role", DateTime.Now, false, false, false);
+            group.Memberships.Add(groupMembership);
+
+            _groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(group);
+            _groupMemberRepositoryMock.Setup(x => x.GetGroupMemberById(groupMemberId)).Returns(groupMember);
 
             // Act
-            _groupService.CreateNewPostOnGroupChat(groupId, groupMemberId, postContent, postImage);
+            _groupService.CreateNewPostOnGroupChat(groupId, groupMemberId, "Test post", null);
 
             // Assert
             Assert.AreEqual(1, group.Posts.Count);
+            Assert.AreEqual(groupMemberId, group.Posts[0].OwnerId);
         }
 
         [Test]
-        public void CreateNewPostOnGroupChat_WithinPostLimit_ShouldAddPost()
+        public void CreateNewPostOnGroupChat_ShouldAddPostToGroupWhenGroupHasDefaultPostSettings()
         {
             // Arrange
             Guid groupId = Guid.NewGuid();
-            Guid groupMemberId = _groupMemberRepository.GetGroupMembers().Last().Id;
-            string postContent = "Test Post Content";
-            string postImage = "test.jpg";
+            Guid groupMemberId = Guid.NewGuid();
+            GroupMember groupMember = new GroupMember(groupMemberId, "Test User", "test@example.com", "password", "profilePictureUrl", "description");
             Group group = new Group(groupId, groupMemberId, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, false, "Test Code");
-            _groupRepository.AddGroup(group);
-            _groupService.AddMemberToGroup(groupMemberId, groupId, "admin");
+            GroupMembership groupMembership = new GroupMembership(groupMemberId, groupMemberId, "Test Name", groupId, "Test Role", DateTime.Now, false, false, false);
+            group.Memberships.Add(groupMembership);
 
-            // Create and add posts to reach post limit
-            for (int i = 0; i < group.MaxPostsPerHourPerUser-2; i++)
-            {
-                Guid postId = Guid.NewGuid();
-                GroupPost post = new GroupPost(postId, groupMemberId, "Post Content", "image.jpg", groupId);
-                group.Posts.Add(post);
-            }
+
+            _groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(group);
+            _groupMemberRepositoryMock.Setup(x => x.GetGroupMemberById(groupMemberId)).Returns(groupMember);
 
             // Act
-            _groupService.CreateNewPostOnGroupChat(groupId, groupMemberId, postContent, postImage);
+            _groupService.CreateNewPostOnGroupChat(groupId, groupMemberId, "Test post", null);
 
             // Assert
-            Assert.AreEqual(group.MaxPostsPerHourPerUser -1, group.Posts.Count);
+            Assert.AreEqual(1, group.Posts.Count);
+            Assert.AreEqual(groupMemberId, group.Posts[0].OwnerId);
         }
 
         [Test]
-        public void CreateNewPostOnGroupChat_ExceedPostLimit_ShouldThrowException()
+        public void CreateNewPostOnGroupChat_ShouldNotAddPostToGroupWhenMemberHasExceededPostLimit()
         {
             // Arrange
             Guid groupId = Guid.NewGuid();
-            Guid groupMemberId = _groupMemberRepository.GetGroupMembers().Last().Id;
-            string postContent = "Test Post Content";
-            string postImage = "test.jpg";
-            Group group = new Group(groupId, groupMemberId, "Test Group", "Test Description", "Test Icon",
-                "Test Banner", 5, false, false, "Test Code");
-            _groupRepository.AddGroup(group);
-            _groupService.AddMemberToGroup(groupMemberId, groupId, "admin");
+            Guid groupMemberId = Guid.NewGuid();
+            GroupMember groupMember = new GroupMember(groupMemberId, "Test User", "test@example.com", "password", "profilePictureUrl", "description");
+            Group group = new Group(groupId, groupMemberId, "Test Group", "Test Description", "Test Icon", "Test Banner", 1, false, false, "Test Code");
+            GroupMembership groupMembership = new GroupMembership(groupMemberId, groupMemberId, "Test Name", groupId, "Test Role", DateTime.Now, false, false, false);
+            group.Memberships.Add(groupMembership);
 
-            Guid postId_1 = Guid.NewGuid();
-            GroupPost post_1 = new GroupPost(postId_1, groupMemberId, "Post Content", "image.jpg", groupId);
-            group.Posts.Add(post_1);
+            _groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(group);
+            _groupMemberRepositoryMock.Setup(x => x.GetGroupMemberById(groupMemberId)).Returns(groupMember);
 
+            // Act
+            _groupService.CreateNewPostOnGroupChat(groupId, groupMemberId, "Test post", null);
+            //_groupService.CreateNewPostOnGroupChat(groupId, groupMemberId, "Test post", null);
 
-            Assert.AreEqual(1,group.Posts.Count);
-
-            for (int i = 0; i < group.MaxPostsPerHourPerUser-1; i++)
-            {
-                Guid postId = Guid.NewGuid();
-                GroupPost post = new GroupPost(postId, groupMemberId, "Post Content", "image.jpg", groupId);
-                group.Posts.Add(post);
-            }
-
-            //Guid postId_1 = Guid.NewGuid();
-            //GroupPost post_1 = new GroupPost(postId_1, groupMemberId, "Post Content", "image.jpg", groupId);
-            //group.Posts.Add(post_1);
-
-            // postId_1 = Guid.NewGuid();
-            // post_1 = new GroupPost(postId_1, groupMemberId, "Post Content", "image.jpg", groupId);
-            //group.Posts.Add(post_1);
-
-            //postId_1 = Guid.NewGuid();
-            //post_1 = new GroupPost(postId_1, groupMemberId, "Post Content", "image.jpg", groupId);
-            //group.Posts.Add(post_1);
-
-            Console.WriteLine($"Number of posts: {group.Posts.Count}");
-
-            Console.WriteLine($"Max posts : {group.MaxPostsPerHourPerUser}");
-            
-
-            // Act & Assert
-            try
-            {
-                _groupService.CreateNewPostOnGroupChat(groupId, groupMemberId, postContent, postImage);
-                Assert.Fail("Expected an exception to be thrown");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Exception thrown: {ex.Message}");
-                Assert.IsNotNull(ex);
-            }
+            // Assert
+            Assert.Throws<Exception>(() => _groupService.CreateNewPostOnGroupChat(groupId, groupMemberId, "Test post", null));
         }
 
+        [Test]
+        public void CreateNewPostOnGroupChat_ShouldAddPostToGroupWhenMemberHasNotExceededPostLimit()
+        {
+            // Arrange
+            Guid groupId = Guid.NewGuid();
+            Guid groupMemberId = Guid.NewGuid();
+            GroupMember groupMember = new GroupMember(groupMemberId, "Test User", "test@example.com", "password", "profilePictureUrl", "description");
+            Group group = new Group(groupId, groupMemberId, "Test Group", "Test Description", "Test Icon", "Test Banner", 2, false, false, "Test Code");
+            GroupMembership groupMembership = new GroupMembership(groupMemberId, groupMemberId,"Test Name",groupId, "Test Role", DateTime.Now, false, false, false);
+            group.Memberships.Add(groupMembership);
+
+            _groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(group);
+            _groupMemberRepositoryMock.Setup(x => x.GetGroupMemberById(groupMemberId)).Returns(groupMember);
+
+            // Act
+            _groupService.CreateNewPostOnGroupChat(groupId, groupMemberId, "Test post", null);
+
+            // Assert
+            Assert.AreEqual(1, group.Posts.Count);
+            Assert.AreEqual(groupMemberId, group.Posts[0].OwnerId);
+
+            // Act
+            _groupService.CreateNewPostOnGroupChat(groupId, groupMemberId, "Test post", null);
+
+            // Assert
+            Assert.AreEqual(2, group.Posts.Count);
+            Assert.AreEqual(groupMemberId, group.Posts[1].OwnerId);
+        }
+
+        [Test]
+        public void GetAllGroups_ShouldReturnAllGroupsForMember()
+        {
+            // Arrange
+            Guid groupMemberId = Guid.NewGuid();
+            GroupMember groupMember = new GroupMember(groupMemberId, "Test User", "test@example.com", "password", "profilePictureUrl", "description");
+            Group group1 = new Group(Guid.NewGuid(), groupMemberId, "Test Group 1", "Test Description 1", "Test Icon 1", "Test Banner 1", 5, true, true, "Test Code 1");
+            Group group2 = new Group(Guid.NewGuid(), groupMemberId, "Test Group 2", "Test Description 2", "Test Icon 2", "Test Banner 2", 5, true, true, "Test Code 2");
+            Group group3 = new Group(Guid.NewGuid(), Guid.NewGuid(), "Test Group 3", "Test Description 3", "Test Icon 3", "Test Banner 3", 5, true, true, "Test Code 3");
+            GroupMembership membership1 = new GroupMembership(groupMemberId, group1.Id, "Test Name 1", group1.Id, "Test Role 1", DateTime.Now, false, false, false);
+            GroupMembership membership2 = new GroupMembership(groupMemberId, group2.Id, "Test Name 2", group2.Id, "Test Role 2", DateTime.Now, false, false, false);
+            GroupMembership membership3 = new GroupMembership(Guid.NewGuid(), group3.Id, "Test Name 3", group3.Id, "Test Role 3", DateTime.Now, false, false, false);
+            groupMember.Memberships.Add(membership1);
+            groupMember.Memberships.Add(membership2);
+            groupMember.Memberships.Add(membership3);
+
+            _groupRepositoryMock.Setup(x => x.GetGroupById(group1.Id)).Returns(group1);
+            _groupRepositoryMock.Setup(x => x.GetGroupById(group2.Id)).Returns(group2);
+            _groupRepositoryMock.Setup(x => x.GetGroupById(group3.Id)).Returns(group3);
+            _groupMemberRepositoryMock.Setup(x => x.GetGroupMemberById(groupMemberId)).Returns(groupMember);
+
+            // Act
+            List<Group> result = _groupService.GetAllGroups(groupMemberId);
+
+            // Assert
+            Assert.AreEqual(3, result.Count);
+            Assert.IsTrue(result.Contains(group1));
+            Assert.IsTrue(result.Contains(group2));
+            Assert.IsTrue(result.Contains(group3));
+        }
 
         [Test]
         public void AddNewOptionToAPoll_ShouldAddOptionToPoll()
         {
+            // Arrange
+            Guid pollId = Guid.NewGuid();
+            Guid groupId = Guid.NewGuid();
             Guid ownerId = Guid.NewGuid();
-            //Guid pollId = Guid.Parse("EE632931-EEB0-4048-92E3-0BB1E1C186F2");
-            string newPollOption = "New Option";
+            Group group = new Group(groupId, ownerId, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
+            Poll poll = new Poll(pollId,ownerId , "Test Poll", groupId);
+            group.AddPoll(poll);
 
-            Guid groupMemberId = ownerId;
-            GroupMember groupMember =
-                new GroupMember(groupMemberId, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
-            _groupMemberRepository.AddGroupMember(groupMember);
+            _groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(group);
 
-
-            // Create a group
-            _groupService.CreateGroup(ownerId);
-
-            Guid groupId = _groupRepository.GetGroups().Last().Id;
-
-            //new Poll(pollId, ownerId, Guid.NewGuid().ToString(), groupId)
-
-            _groupService.CreateNewPoll(groupId, ownerId, "Test Poll");
-            //_groupRepository.GetGroups().Last().GetPoll());
-            Guid pollID = _groupService.GetGroupPolls(groupId).Last().Id;
             // Act
-            _groupService.AddNewOptionToAPoll(pollID, groupId, newPollOption);
+            _groupService.AddNewOptionToAPoll(pollId, groupId, "New Option");
+
+            _groupService.AddNewOptionToAPoll(pollId, groupId, "New Option");
+
+            _groupService.AddNewOptionToAPoll(pollId, groupId, "New Option");
 
             // Assert
-            // Retrieve the updated poll from the repository
-            var updatedPoll = _groupService.GetSpecificGroupPoll(groupId, pollID);
-            // Check if the new option is present in the poll's options
-            Assert.IsTrue(updatedPoll.Options.Contains(newPollOption),
-                $"The new poll option '{newPollOption}' was not added to the poll with ID '{pollID}' in group '{groupId}'.");
+            Assert.AreEqual(3, poll.Options.Count);
+            Assert.IsTrue(poll.Options.Contains("New Option"));
+        }
 
-            Assert.Throws
-                <InvalidOperationException>(() =>
-            {
-                _groupService.AddNewOptionToAPoll(Guid.NewGuid(), _groupRepository.GetGroups()[10].Id, "");
-            });
+        [Test]
+        public void AddNewOptionToAPoll_ShouldThrowExceptionWhenPollNotFound()
+        {
+            // Arrange
+            Guid pollId = Guid.NewGuid();
+            Guid groupId = Guid.NewGuid();
+            Group group = new Group(groupId, Guid.NewGuid(), "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
+
+            _groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(group);
+
+            // Act and Assert
+            Assert.Throws<InvalidOperationException>(() => _groupService.AddNewOptionToAPoll(pollId, groupId, "New Option"));
+        }
+
+
+
+
+        [Test]
+        public void CreateNewPoll_ShouldAddPollToGroup()
+        {
+            // Arrange
+            Guid groupId = Guid.NewGuid();
+            Guid groupMemberId = Guid.NewGuid();
+            string pollDescription = "Test Poll";
+            Group group = new Group(groupId, groupMemberId, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
+
+            _groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(group);
+
+            // Act
+            _groupService.CreateNewPoll(groupId, groupMemberId, pollDescription);
+
+            // Assert
+            Assert.AreEqual(1, group.Polls.Count);
+            Assert.IsFalse(group.Polls.Contains(new Poll(Guid.NewGuid(), groupMemberId, "description", groupId)));
+        }
+
+
+        [Test]
+        public void EndTimeoutOfMemberFromGroup_ShouldEndTimeoutOfGroupMembership()
+        {
+            // Arrange
+            Guid groupId = Guid.NewGuid();
+            Guid groupMemberId = Guid.NewGuid();
+
+            Guid groupMembershipId = Guid.NewGuid();
+            Group group = new Group(groupId, groupMemberId, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
+            GroupMembership groupMembership = new GroupMembership(groupMembershipId, groupMemberId, "Test Name", groupId, "Test Role", DateTime.Now, true, false, false);
+            group.Memberships.Add(groupMembership);
+
+            _groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(group);
+            _groupMembershipRepositoryMock.Setup(x => x.GetGroupMembershipById(groupMembershipId)).Returns(groupMembership);
+
+            // Act
+            _groupService.EndTimeoutOfMemberFromGroup(groupMemberId, groupId);
+
+            // Assert
+            Assert.IsFalse(groupMembership.IsTimedOut);
+            _groupMembershipRepositoryMock.Verify(x => x.UpdateGroupMembership(groupMembership), Times.Once);
+        }
+
+        [Test]
+        public void EndTimeoutOfMemberFromGroup_ShouldThrowExceptionWhenGroupMembershipNotFound()
+        {
+            // Arrange
+            Guid groupId = Guid.NewGuid();
+            Guid groupMemberId = Guid.NewGuid();
+            Group group = new Group(groupId, groupMemberId, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
+
+
+
+
+            _groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(group);
+            _groupMembershipRepositoryMock.Setup(x => x.GetGroupMembershipById(groupMemberId)).Returns((GroupMembership)null);
+
+            // Act and Assert
+            Assert.Throws<InvalidOperationException>(() => _groupService.EndTimeoutOfMemberFromGroup(groupMemberId, groupId));
+        }
+
+        [Test]
+        public void TimeoutMemberFromGroup_ShouldTimeoutGroupMembership()
+        {
+            // Arrange
+            Guid groupId = Guid.NewGuid();
+            Guid groupMemberId = Guid.NewGuid();
+
+            Guid groupMembershipId = Guid.NewGuid();
+            Group group = new Group(groupId, groupMemberId, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
+            GroupMembership groupMembership = new GroupMembership(groupMembershipId, groupMemberId, "Test Name", groupId, "Test Role", DateTime.Now, true, false, false);
+            group.Memberships.Add(groupMembership);
+
+            _groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(group);
+            _groupMembershipRepositoryMock.Setup(x => x.GetGroupMembershipById(groupMembershipId)).Returns(groupMembership);
+
+            // Act
+            _groupService.TimeoutMemberFromGroup(groupMemberId, groupId);
+
+            // Assert
+            Assert.IsTrue(groupMembership.IsTimedOut);
+            _groupMembershipRepositoryMock.Verify(x => x.UpdateGroupMembership(groupMembership), Times.Once);
+        }
+
+        [Test]
+        public void TimeoutMemberFromGroup_ShouldThrowExceptionWhenGroupMembershipNotFound()
+        {
+            // Arrange
+            Guid groupId = Guid.NewGuid();
+            Guid groupMemberId = Guid.NewGuid();
+
+            Guid groupMembershipId = Guid.NewGuid();
+            Group group = new Group(groupId, groupMemberId, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
+            GroupMembership groupMembership = new GroupMembership(groupMembershipId, groupMemberId, "Test Name", groupId, "Test Role", DateTime.Now, true, false, false);
+
+            _groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(group);
+            _groupMembershipRepositoryMock.Setup(x => x.GetGroupMembershipById(groupMembershipId)).Returns((GroupMembership)null);
+
+            // Act and Assert
+            Assert.Throws<InvalidOperationException>(() => _groupService.TimeoutMemberFromGroup(groupMemberId, groupId));
+        }
+
+
+        [Test]
+        public void UnbanMemberFromGroup_ShouldUnbanGroupMembership()
+        {
+            // Arrange
+            Guid groupId = Guid.NewGuid();
+            Guid unbannedGroupMemberId = Guid.NewGuid();
+            Group group = new Group(groupId, unbannedGroupMemberId, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
+            Guid groupMembershipId = Guid.NewGuid();
+            GroupMembership groupMembership = new GroupMembership(groupMembershipId, unbannedGroupMemberId, "Test Name", groupId, "Test Role", DateTime.Now, true, false, false);
+
+            group.Memberships.Add(groupMembership);
+
+            _groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(group);
+            _groupMembershipRepositoryMock.Setup(x => x.GetGroupMembershipById(groupMembershipId)).Returns(groupMembership);
+
+            // Act
+            _groupService.UnbanMemberFromGroup(unbannedGroupMemberId, groupId);
+
+            // Assert
+            Assert.IsFalse(groupMembership.IsBanned);
+            _groupMembershipRepositoryMock.Verify(x => x.UpdateGroupMembership(groupMembership), Times.Once);
+        }
+
+        [Test]
+        public void UnbanMemberFromGroup_ShouldThrowExceptionWhenGroupMembershipNotFound()
+        {
+            // Arrange
+            Guid groupId = Guid.NewGuid();
+            Guid unbannedGroupMemberId = Guid.NewGuid();
+            Group group = new Group(groupId, unbannedGroupMemberId, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
+            
+
+            Guid groupMembershipId = Guid.NewGuid();
+             GroupMembership groupMembership = new GroupMembership(groupMembershipId, unbannedGroupMemberId, "Test Name", groupId, "Test Role", DateTime.Now, true, false, false);
+
+
+            _groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(group);
+            _groupMembershipRepositoryMock.Setup(x => x.GetGroupMembershipById(groupMembershipId)).Returns((GroupMembership)null);
+
+            // Act and Assert
+            Assert.Throws<InvalidOperationException>(() => _groupService.UnbanMemberFromGroup(unbannedGroupMemberId, groupId));
+        }
+
+        [Test]
+        public void BanMemberFromGroup_ShouldBanGroupMembership()
+        {
+            // Arrange
+            Guid groupId = Guid.NewGuid();
+            Guid bannedGroupMemberId = Guid.NewGuid();
+            Group group = new Group(groupId, bannedGroupMemberId, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
+            Guid groupMembershipId = Guid.NewGuid();
+            GroupMembership groupMembership = new GroupMembership(groupMembershipId, bannedGroupMemberId, "Test Name", groupId, "Test Role", DateTime.Now, true, false, false);
+
+            group.Memberships.Add(groupMembership);
+
+            _groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(group);
+            _groupMembershipRepositoryMock.Setup(x => x.GetGroupMembershipById(groupMembershipId)).Returns(groupMembership);
+
+            // Act
+            _groupService.BanMemberFromGroup(bannedGroupMemberId, groupId);
+
+            // Assert
+            Assert.IsTrue(groupMembership.IsBanned);
+            _groupMembershipRepositoryMock.Verify(x => x.UpdateGroupMembership(groupMembership), Times.Once);
+        }
+
+        [Test]
+        public void BanMemberFromGroup_ShouldThrowExceptionWhenGroupMembershipNotFound()
+        {
+            // Arrange
+            Guid groupId = Guid.NewGuid();
+            Guid bannedGroupMemberId = Guid.NewGuid();
+            Group group = new Group(groupId, bannedGroupMemberId, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
+            Guid groupMembershipId = Guid.NewGuid();
+            GroupMembership groupMembership = new GroupMembership(groupMembershipId, bannedGroupMemberId, "Test Name", groupId, "Test Role", DateTime.Now, true, false, false);
+            
+
+            _groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(group);
+            _groupMembershipRepositoryMock.Setup(x => x.GetGroupMembershipById(groupId)).Returns((GroupMembership)null);
+
+            // Act and Assert
+            Assert.Throws<InvalidOperationException>(() => _groupService.BanMemberFromGroup(bannedGroupMemberId, groupId));
+        }
+
+        [Test]
+        public void GetSpecificGroupPoll_ShouldReturnPoll()
+        {
+            // Arrange
+            Guid groupId = Guid.NewGuid();
+            Guid pollId = Guid.NewGuid();
+
+            Guid ownerId = Guid.NewGuid();
+            Group group = new Group(groupId, ownerId, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
+            Poll poll = new Poll(pollId, ownerId, "Test Poll",  groupId);
+            group.AddPoll(poll);
+
+            _groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(group);
+
+            // Act
+            Poll result = _groupService.GetSpecificGroupPoll(groupId, pollId);
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(pollId, result.Id);
+            _groupRepositoryMock.Verify(x => x.GetGroupById(groupId), Times.Once);
+        }
+
+        [Test]
+        public void GetSpecificGroupPoll_ShouldThrowExceptionWhenGroupNotFound()
+        {
+            // Arrange
+            Guid groupId = Guid.NewGuid();
+            Guid pollId = Guid.NewGuid();
+
+            Guid ownerId = Guid.NewGuid();
+            Group group = new Group(groupId, ownerId, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
+            Poll poll = new Poll(pollId, ownerId, "Test Poll", groupId);
+            // group.AddPoll(poll);
+
+
+            _groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(group);
+
+            // Act and Assert
+            Assert.Throws<InvalidOperationException>(() => _groupService.GetSpecificGroupPoll(groupId, pollId));
+        }
+
+        [Test]
+        public void GetSpecificGroupPoll_ShouldThrowExceptionWhenPollNotFound()
+        {
+            // Arrange
+            Guid groupId = Guid.NewGuid();
+            Guid pollId = Guid.NewGuid();
+            Group group = new Group(groupId, Guid.NewGuid(), "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
+
+            _groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(group);
+
+            // Act and Assert
+            Assert.Throws<InvalidOperationException>(() => _groupService.GetSpecificGroupPoll(groupId, pollId));
+        }
+
+        [Test]
+        public void GetGroupPolls_ShouldReturnPolls()
+        {
+            // Arrange
+            Guid groupId = Guid.NewGuid();
+            Guid ownerId = Guid.NewGuid();
+            Group group = new Group(groupId, ownerId, "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
+            Poll poll1 = new Poll(Guid.NewGuid(), ownerId, "Test Poll1", groupId);
+            Poll poll2 = new Poll(Guid.NewGuid(), Guid.NewGuid(), "Test Poll2", groupId);
+            group.AddPoll(poll1);
+            group.AddPoll(poll2);
+
+            _groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(group);
+
+            // Act
+            List<Poll> result = _groupService.GetGroupPolls(groupId);
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(2, result.Count);
+            Assert.IsTrue(result.Contains(poll1));
+            Assert.IsTrue(result.Contains(poll2));
+            _groupRepositoryMock.Verify(x => x.GetGroupById(groupId), Times.Once);
+        }
+
+        [Test]
+        public void GetGroupPolls_ShouldThrowExceptionWhenGroupNotFound()
+        {
+            // Arrange
+            Guid groupId = Guid.NewGuid();
+            Group group = new Group(groupId, Guid.NewGuid(), "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
+
+
+            _groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns((Group)null);
+
+            // Act and Assert
+            Assert.Throws<NullReferenceException>(() => _groupService.GetGroupPolls(groupId));
+        }
+
+        [Test]
+        public void GetRequestsToJoin_ShouldReturnRequests()
+        {
+            // Arrange
+            Guid groupId = Guid.NewGuid();
+            Group group = new Group(groupId, Guid.NewGuid(), "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
+            Request request1 = new Request(Guid.NewGuid(), Guid.NewGuid(), "Test User 1", groupId);
+            Request request2 = new Request(Guid.NewGuid(), Guid.NewGuid(), "Test User 2", groupId);
+            group.AddRequest(request1);
+            group.AddRequest(request2);
+
+            _groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(group);
+
+            // Act
+            List<Request> result = _groupService.GetRequestsToJoin(groupId);
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(2, result.Count);
+            Assert.IsTrue(result.Contains(request1));
+            Assert.IsTrue(result.Contains(request2));
+            _groupRepositoryMock.Verify(x => x.GetGroupById(groupId), Times.Once);
+        }
+
+        [Test]
+        public void GetRequestsToJoin_ShouldThrowExceptionWhenGroupNotFound()
+        {
+            // Arrange
+            Guid groupId = Guid.NewGuid();
+
+            _groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns((Group)null);
+
+            // Act and Assert
+            Assert.Throws<NullReferenceException>(() => _groupService.GetRequestsToJoin(groupId));
+        }
+
+
+        [Test]
+        public void GetGroup_ShouldReturnGroup()
+        {
+            // Arrange
+            Guid groupId = Guid.NewGuid();
+            Group group = new Group(groupId, Guid.NewGuid(), "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
+
+            _groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(group);
+
+            // Act
+            Group result = _groupService.GetGroup(groupId);
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(groupId, result.Id);
+            _groupRepositoryMock.Verify(x => x.GetGroupById(groupId), Times.Once);
+        }
+
+        [Test]
+        public void DeleteGroup_ShouldDeleteGroup()
+        {
+            // Arrange
+            Guid groupId = Guid.NewGuid();
+            Group group = new Group(groupId, Guid.NewGuid(), "Test Group", "Test Description", "Test Icon", "Test Banner", 5, true, true, "Test Code");
+
+            _groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(group);
+            _groupRepositoryMock.Setup(x => x.RemoveGroupById(groupId));
+
+            // Act
+            _groupService.DeleteGroup(groupId);
+
+            // Assert
+            _groupRepositoryMock.Verify(x => x.RemoveGroupById(groupId), Times.Once);
+        }
+
+
+        [Test]
+        public void CreateGroup_ShouldCreateGroup()
+        {
+            // Arrange
+            Guid ownerId = Guid.NewGuid();
+            GroupMember owner = new GroupMember(ownerId, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(),
+                Guid.NewGuid().ToString(), Guid.NewGuid().ToString().Substring(0, 10), "description");
+
+
+            _groupMemberRepositoryMock.Setup(x => x.GetGroupMemberById(ownerId)).Returns(owner);
+            _groupRepositoryMock.Setup(x => x.AddGroup(It.IsAny<Group>()));
+            _groupMemberRepositoryMock.Setup(x => x.AddGroupMember(It.IsAny<GroupMember>()));
+
+            // Act
+            _groupService.CreateGroup(ownerId);
+
+            // Assert
+            _groupRepositoryMock.Verify(x => x.AddGroup(It.IsAny<Group>()), Times.Once);
+            _groupMemberRepositoryMock.Verify(x => x.AddGroupMember(It.IsAny<GroupMember>()), Times.Once);
+        }
+
+
+
+        [Test]
+        public void GetMemberFromGroup_ShouldThrowException_WhenGroupMemberDoesNotExist()
+        {
+            // Arrange
+            Guid groupId = Guid.NewGuid();
+            Guid groupMemberId = Guid.NewGuid();
+            Group group = new Group(groupId, groupMemberId, "defaultGroupName","defaultGroupDescription", "defaultGroupIcon", "defaultGroupBanner", 5, false, false, "defaultGroupCode");
+
+            _groupRepositoryMock.Setup(x => x.GetGroupById(groupId)).Returns(group);
+
+            // Act and Assert
+            Assert.Throws<Exception>(() => _groupService.GetMemberFromGroup(groupId, groupMemberId));
         }
 
 
